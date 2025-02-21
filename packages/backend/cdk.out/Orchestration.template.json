@@ -1,0 +1,1101 @@
+{
+ "Resources": {
+  "ReleaseAccountVpc7FE5BCA2": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/Resource"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet1SubnetCBDC8D79": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1a",
+    "CidrBlock": "10.0.0.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/Subnet"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet1RouteTable860E178A": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/RouteTable"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet1RouteTableAssociationDFAE909A": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet1RouteTable860E178A"
+    },
+    "SubnetId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet1SubnetCBDC8D79"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/RouteTableAssociation"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet1DefaultRoute3C840941": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+    },
+    "RouteTableId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet1RouteTable860E178A"
+    }
+   },
+   "DependsOn": [
+    "ReleaseAccountVpcVPCGW3B1F48F6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/DefaultRoute"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet2SubnetCDB2D143": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1b",
+    "CidrBlock": "10.0.64.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/Subnet"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet2RouteTableF9CCB2F1": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/RouteTable"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet2RouteTableAssociation34936D34": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet2RouteTableF9CCB2F1"
+    },
+    "SubnetId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet2SubnetCDB2D143"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/RouteTableAssociation"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet2DefaultRouteF68BAC73": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+    },
+    "RouteTableId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet2RouteTableF9CCB2F1"
+    }
+   },
+   "DependsOn": [
+    "ReleaseAccountVpcVPCGW3B1F48F6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/DefaultRoute"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet3SubnetD71F9F84": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-1c",
+    "CidrBlock": "10.0.128.0/18",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "Public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3"
+     }
+    ],
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/Subnet"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet3RouteTableA0DB7667": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3"
+     }
+    ],
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/RouteTable"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet3RouteTableAssociation02789DCB": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet3RouteTableA0DB7667"
+    },
+    "SubnetId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet3SubnetD71F9F84"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/RouteTableAssociation"
+   }
+  },
+  "ReleaseAccountVpcPublicSubnet3DefaultRouteCFF08A14": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+    },
+    "RouteTableId": {
+     "Ref": "ReleaseAccountVpcPublicSubnet3RouteTableA0DB7667"
+    }
+   },
+   "DependsOn": [
+    "ReleaseAccountVpcVPCGW3B1F48F6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/DefaultRoute"
+   }
+  },
+  "ReleaseAccountVpcIGWBC2CCC8D": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "Orchestration/ReleaseAccount/Vpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/IGW"
+   }
+  },
+  "ReleaseAccountVpcVPCGW3B1F48F6": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+    },
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/VPCGW"
+   }
+  },
+  "ReleaseAccountVpcRestrictDefaultSecurityGroupCustomResource6AE27492": {
+   "Type": "Custom::VpcRestrictDefaultSG",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E",
+      "Arn"
+     ]
+    },
+    "DefaultSecurityGroupId": {
+     "Fn::GetAtt": [
+      "ReleaseAccountVpc7FE5BCA2",
+      "DefaultSecurityGroup"
+     ]
+    },
+    "Account": "481665124648"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Vpc/RestrictDefaultSecurityGroupCustomResource/Default"
+   }
+  },
+  "ReleaseAccountSecurityGroup77108A68": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Orchestration/ReleaseAccount/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "ReleaseAccountVpc7FE5BCA2"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/SecurityGroup/Resource"
+   }
+  },
+  "ReleaseAccountCluster7421C8B9": {
+   "Type": "AWS::ECS::Cluster",
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/Cluster/Resource"
+   }
+  },
+  "ReleaseAccountAWSNukeTaskRoleC11C62E6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/AWSNuke/TaskRole/Resource"
+   }
+  },
+  "ReleaseAccountAWSNukeTaskRoleDefaultPolicyCBAA227A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": "arn:aws:iam::*:role/AWSNukeRole"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ReleaseAccountAWSNukeTaskRoleDefaultPolicyCBAA227A",
+    "Roles": [
+     {
+      "Ref": "ReleaseAccountAWSNukeTaskRoleC11C62E6"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/AWSNuke/TaskRole/DefaultPolicy/Resource"
+   }
+  },
+  "ReleaseAccountAWSNuke87F80E57": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Essential": true,
+      "Image": {
+       "Fn::Sub": "481665124648.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-481665124648-us-east-1:e75dddb720883467888b57b094ffb06b96de6f24ea38c4baa1a27093d222ca05"
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "ReleaseAccountAWSNukeLogGroupC8957D3D"
+        },
+        "awslogs-stream-prefix": "aws-nuke",
+        "awslogs-region": "us-east-1"
+       }
+      },
+      "Name": "aws-nuke"
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "ReleaseAccountAWSNukeExecutionRole02EE0B84",
+      "Arn"
+     ]
+    },
+    "Family": "OrchestrationReleaseAccountAWSNuke6B2F8DDC",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "RuntimePlatform": {
+     "CpuArchitecture": "ARM64",
+     "OperatingSystemFamily": "LINUX"
+    },
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "ReleaseAccountAWSNukeTaskRoleC11C62E6",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/AWSNuke/Resource"
+   }
+  },
+  "ReleaseAccountAWSNukeExecutionRole02EE0B84": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/AWSNuke/ExecutionRole/Resource"
+   }
+  },
+  "ReleaseAccountAWSNukeExecutionRoleDefaultPolicyCCD5208D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-east-1:481665124648:repository/cdk-hnb659fds-container-assets-481665124648-us-east-1"
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "ReleaseAccountAWSNukeLogGroupC8957D3D",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ReleaseAccountAWSNukeExecutionRoleDefaultPolicyCCD5208D",
+    "Roles": [
+     {
+      "Ref": "ReleaseAccountAWSNukeExecutionRole02EE0B84"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/AWSNuke/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "ReleaseAccountAWSNukeLogGroupC8957D3D": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/AWSNukeLogGroup/Resource"
+   }
+  },
+  "ReleaseAccountStateMachineRoleFCCD337E": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/StateMachine/Role/Resource"
+   }
+  },
+  "ReleaseAccountStateMachineRoleDefaultPolicy2EEC1E01": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ssoadmin:deleteAccountAssignment",
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:sso:::instance/ssoins-7223803ee0e299f3",
+        "arn:aws:sso:::permissionSet/ssoins-7223803ee0e299f3/ps-9a01fed6153c4518"
+       ]
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": "arn:aws:iam::886436967273:role/VendingMachine"
+      },
+      {
+       "Action": "dynamodb:UpdateItem",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:dynamodb:us-east-1:481665124648:table/",
+          {
+           "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+          }
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "ecs:RunTask",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "ReleaseAccountAWSNuke87F80E57"
+       }
+      },
+      {
+       "Action": [
+        "ecs:DescribeTasks",
+        "ecs:StopTask"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "iam:PassRole",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "ReleaseAccountAWSNukeExecutionRole02EE0B84",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::GetAtt": [
+          "ReleaseAccountAWSNukeTaskRoleC11C62E6",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "events:DescribeRule",
+        "events:PutRule",
+        "events:PutTargets"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:events:us-east-1:481665124648:rule/StepFunctionsGetEventsForECSTaskRule"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ReleaseAccountStateMachineRoleDefaultPolicy2EEC1E01",
+    "Roles": [
+     {
+      "Ref": "ReleaseAccountStateMachineRoleFCCD337E"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/StateMachine/Role/DefaultPolicy/Resource"
+   }
+  },
+  "ReleaseAccountStateMachineEC3FBD41": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"Is User Initiated?\",\"States\":{\"Is User Initiated?\":{\"Type\":\"Choice\",\"QueryLanguage\":\"JSONata\",\"Choices\":[{\"Condition\":\"{% $states.input.init = \\\"user\\\" %}\",\"Next\":\"Unschedule Destroy Account\"}],\"Default\":\"Remove Account Access\"},\"Remove Account Access\":{\"Next\":\"Unassign Account\",\"Type\":\"Task\",\"ResultPath\":\"$.removeAccessResult\",\"Credentials\":{\"RoleArn\":\"arn:aws:iam::886436967273:role/VendingMachine\"},\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::aws-sdk:ssoadmin:deleteAccountAssignment\",\"Parameters\":{\"InstanceArn\":\"arn:aws:sso:::instance/ssoins-7223803ee0e299f3\",\"PermissionSetArn\":\"arn:aws:sso:::permissionSet/ssoins-7223803ee0e299f3/ps-9a01fed6153c4518\",\"PrincipalType\":\"USER\",\"PrincipalId.$\":\"$.identity.userId\",\"TargetType\":\"AWS_ACCOUNT\",\"TargetId.$\":\"$.account.accountId\"}},\"Unschedule Destroy Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Remove Account Access\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::aws-sdk:scheduler:deleteSchedule\",\"Arguments\":{\"Name\":\"{% $states.input.account.accountId & \\\"-destroy\\\"  %}\",\"GroupName\":\"VendingMachine\"},\"Output\":\"{% $states.input %}\"},\"Unassign Account\":{\"Next\":\"Nuke Account\",\"Type\":\"Task\",\"ResultPath\":\"$.freeResult\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::dynamodb:updateItem\",\"Parameters\":{\"Key\":{\"accountId\":{\"S.$\":\"$.account.accountId\"}},\"TableName\":\"",
+       {
+        "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+       },
+       "\",\"ExpressionAttributeNames\":{\"#name\":\"name\",\"#status\":\"status\",\"#updatedAt\":\"updatedAt\",\"#assignedTo\":\"assignedTo\",\"#assignedAt\":\"assignedAt\",\"#expiresAt\":\"expiresAt\"},\"ExpressionAttributeValues\":{\":status\":{\"S\":\"DESTROYING\"},\":updatedAt\":{\"S.$\":\"$$.State.EnteredTime\"}},\"UpdateExpression\":\"SET #status = :status, #updatedAt = :updatedAt REMOVE #name, #assignedTo, #assignedAt, #expiresAt\"}},\"Nuke Account\":{\"Next\":\"Release Account\",\"Type\":\"Task\",\"ResultPath\":\"$.nukeResult\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::ecs:runTask.sync\",\"Parameters\":{\"Cluster\":\"",
+       {
+        "Fn::GetAtt": [
+         "ReleaseAccountCluster7421C8B9",
+         "Arn"
+        ]
+       },
+       "\",\"TaskDefinition\":\"OrchestrationReleaseAccountAWSNuke6B2F8DDC\",\"NetworkConfiguration\":{\"AwsvpcConfiguration\":{\"AssignPublicIp\":\"ENABLED\",\"Subnets\":[\"",
+       {
+        "Ref": "ReleaseAccountVpcPublicSubnet1SubnetCBDC8D79"
+       },
+       "\",\"",
+       {
+        "Ref": "ReleaseAccountVpcPublicSubnet2SubnetCDB2D143"
+       },
+       "\",\"",
+       {
+        "Ref": "ReleaseAccountVpcPublicSubnet3SubnetD71F9F84"
+       },
+       "\"],\"SecurityGroups\":[\"",
+       {
+        "Fn::GetAtt": [
+         "ReleaseAccountSecurityGroup77108A68",
+         "GroupId"
+        ]
+       },
+       "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"aws-nuke\",\"Environment\":[{\"Name\":\"AWS_NUKE_ACCOUNT_ID\",\"Value.$\":\"$.account.accountId\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Release Account\":{\"End\":true,\"Type\":\"Task\",\"ResultPath\":\"$.freeResult\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::dynamodb:updateItem\",\"Parameters\":{\"Key\":{\"accountId\":{\"S.$\":\"$.account.accountId\"}},\"TableName\":\"",
+       {
+        "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+       },
+       "\",\"ExpressionAttributeNames\":{\"#status\":\"status\",\"#updatedAt\":\"updatedAt\"},\"ExpressionAttributeValues\":{\":status\":{\"S\":\"FREE\"},\":updatedAt\":{\"S.$\":\"$$.State.EnteredTime\"}},\"UpdateExpression\":\"SET #status = :status, #updatedAt = :updatedAt\"}}}}"
+      ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "ReleaseAccountStateMachineRoleFCCD337E",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "ReleaseAccountStateMachineRoleDefaultPolicy2EEC1E01",
+    "ReleaseAccountStateMachineRoleFCCD337E"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/StateMachine/Resource"
+   }
+  },
+  "ReleaseAccountSchedulerPolicy0701BD64": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "scheduler:CreateSchedule",
+        "scheduler:DeleteSchedule"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:scheduler:us-east-1:481665124648:schedule/VendingMachine/*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ReleaseAccountSchedulerPolicy0701BD64",
+    "Roles": [
+     {
+      "Ref": "ReleaseAccountStateMachineRoleFCCD337E"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/ReleaseAccount/SchedulerPolicy/Resource"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Action": [
+          "ec2:AuthorizeSecurityGroupIngress",
+          "ec2:AuthorizeSecurityGroupEgress",
+          "ec2:RevokeSecurityGroupIngress",
+          "ec2:RevokeSecurityGroupEgress"
+         ],
+         "Resource": [
+          {
+           "Fn::Join": [
+            "",
+            [
+             "arn:aws:ec2:us-east-1:481665124648:security-group/",
+             {
+              "Fn::GetAtt": [
+               "ReleaseAccountVpc7FE5BCA2",
+               "DefaultSecurityGroup"
+              ]
+             }
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role"
+   }
+  },
+  "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-481665124648-us-east-1",
+     "S3Key": "7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+   },
+   "DependsOn": [
+    "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.7fa1e366ee8a9ded01fc355f704cff92bfd179574e6f9cfee800a3541df1b200",
+    "aws:asset:property": "Code"
+   }
+  },
+  "AssignAccountSchedulerRoleC95074D0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "scheduler.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/AssignAccount/SchedulerRole/Resource"
+   }
+  },
+  "AssignAccountSchedulerRoleDefaultPolicy0BEC1381": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "states:StartExecution",
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "ReleaseAccountStateMachineEC3FBD41"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AssignAccountSchedulerRoleDefaultPolicy0BEC1381",
+    "Roles": [
+     {
+      "Ref": "AssignAccountSchedulerRoleC95074D0"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/AssignAccount/SchedulerRole/DefaultPolicy/Resource"
+   }
+  },
+  "AssignAccountStateMachineRole1C9D38FA": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/AssignAccount/StateMachine/Role/Resource"
+   }
+  },
+  "AssignAccountStateMachineRoleDefaultPolicy1F88BFF6": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:query",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+          },
+          "/index/statusIndex"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": "arn:aws:iam::886436967273:role/VendingMachine"
+      },
+      {
+       "Action": "events:PutEvents",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "EventBus:ExportsOutputFnGetAttVendingMachine168CF2DDArn8993BE4F"
+       }
+      },
+      {
+       "Action": "iam:PassRole",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AssignAccountSchedulerRoleC95074D0",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AssignAccountStateMachineRoleDefaultPolicy1F88BFF6",
+    "Roles": [
+     {
+      "Ref": "AssignAccountStateMachineRole1C9D38FA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/AssignAccount/StateMachine/Role/DefaultPolicy/Resource"
+   }
+  },
+  "AssignAccountStateMachineB5CF396F": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"Get Free Account\",\"States\":{\"Get Free Account\":{\"Next\":\"Unmarshall Account\",\"Type\":\"Task\",\"ResultPath\":\"$.account\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::aws-sdk:dynamodb:query\",\"Parameters\":{\"TableName\":\"",
+       {
+        "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+       },
+       "\",\"IndexName\":\"statusIndex\",\"KeyConditionExpression\":\"#status = :status\",\"ExpressionAttributeNames\":{\"#status\":\"status\"},\"ExpressionAttributeValues\":{\":status\":{\"S\":\"FREE\"}},\"Limit\":1}},\"Unmarshall Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Account Found?\",\"Type\":\"Pass\",\"Assign\":{\"account\":\"{% (\\n  $unmarshall := function ($object) {(\\n    $not($exists($object)) or $object = null ? null :\\n    $type($object) = 'array' ?\\n      [$map($object, $unmarshall)]\\n      : $type($object) = 'object' ?\\n        $merge($each($object, function ($val, $key) {\\n              { $key: $convertValue($val) }\\n          })\\n        )\\n      : $object;\\n  )};\\n\\n  $convertValue := function ($object) {(\\n    $type := $keys($object)[0];\\n    $value := $lookup($object, $type);\\n  \\n    $type in ['S', 'SS', 'Ss', 'B', 'BS', 'Bs'] ?  $value\\n      : $type in ['N'] ? $number($value)\\n      : $type in ['M'] ? $unmarshall($value)\\n      : $type in ['BOOL', 'Bool'] ? $value = 'true' or $value = true\\n      : $type in ['L'] ? [$map($value, $convertValue)]\\n      : $type in ['NS', 'Ns'] ? [$value.$number()]\\n      : $type in ['NULL', 'Null', 'Nul'] ? null\\n      : $error('Unsupported type: ' & $type);\\n  )};\\n \\n  $unmarshall($states.input.account.Items[0]);\\n) %}\"}},\"Account Found?\":{\"Type\":\"Choice\",\"QueryLanguage\":\"JSONata\",\"Choices\":[{\"Condition\":\"{% $boolean($account) %}\",\"Next\":\"Assign Values\"}],\"Default\":\"Wait\"},\"Wait\":{\"Type\":\"Wait\",\"Seconds\":2,\"Next\":\"Put Event Failed\"},\"Put Event Failed\":{\"QueryLanguage\":\"JSONata\",\"End\":true,\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::events:putEvents\",\"Arguments\":{\"Entries\":[{\"Detail\":\"{% $string({\\n                  \\\"taskId\\\": $states.input.taskId,\\n                  \\\"message\\\": \\\"No available account.\\\",\\n                  \\\"status\\\": \\\"FAILED\\\"\\n              }) %}\",\"DetailType\":\"accountAssignationFailed\",\"Source\":\"VendingMachine\",\"EventBusName\":\"",
+       {
+        "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+       },
+       "\"}]},\"Output\":\"{% $states.input %}\"},\"Assign Values\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Lock Account\",\"Type\":\"Pass\",\"Assign\":{\"expiresAt\":\"{% $fromMillis($millis() + $states.input.expiration * 24 * 60 * 60 * 1000) %}\"}},\"Lock Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Unmarshall Updated Account\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::dynamodb:updateItem\",\"Assign\":{\"account\":\"{% $states.result.Attributes %}\"},\"Arguments\":{\"Key\":{\"accountId\":{\"S\":\"{% $account.accountId %}\"}},\"TableName\":\"",
+       {
+        "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+       },
+       "\",\"ConditionExpression\":\"#status = :free\",\"ExpressionAttributeNames\":{\"#name\":\"name\",\"#status\":\"status\",\"#updatedAt\":\"updatedAt\",\"#assignedAt\":\"assignedAt\",\"#assignedTo\":\"assignedTo\",\"#expiresAt\":\"expiresAt\"},\"ExpressionAttributeValues\":{\":name\":{\"S\":\"{% $states.input.name %}\"},\":status\":{\"S\":\"USED\"},\":free\":{\"S\":\"FREE\"},\":updatedAt\":{\"S\":\"{% $now() %}\"},\":assignedAt\":{\"S\":\"{% $now() %}\"},\":assignedTo\":{\"S\":\"{% $states.input.identity.userId %}\"},\":expiresAt\":{\"S\":\"{% $expiresAt %}\"}},\"ReturnValues\":\"ALL_NEW\",\"UpdateExpression\":\"SET #name = :name, #status = :status, #updatedAt = :updatedAt, #assignedAt = :assignedAt, #assignedTo = :assignedTo, #expiresAt = :expiresAt\"},\"Output\":\"{% $states.input %}\",\"Catch\":[{\"ErrorEquals\":[\"ConditionalCheckFailedException\"],\"Next\":\"Account Already Used\"}]},\"Unmarshall Updated Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Assign Account\",\"Type\":\"Pass\",\"Assign\":{\"account\":\"{% (\\n  $unmarshall := function ($object) {(\\n    $not($exists($object)) or $object = null ? null :\\n    $type($object) = 'array' ?\\n      [$map($object, $unmarshall)]\\n      : $type($object) = 'object' ?\\n        $merge($each($object, function ($val, $key) {\\n              { $key: $convertValue($val) }\\n          })\\n        )\\n      : $object;\\n  )};\\n\\n  $convertValue := function ($object) {(\\n    $type := $keys($object)[0];\\n    $value := $lookup($object, $type);\\n  \\n    $type in ['S', 'SS', 'Ss', 'B', 'BS', 'Bs'] ?  $value\\n      : $type in ['N'] ? $number($value)\\n      : $type in ['M'] ? $unmarshall($value)\\n      : $type in ['BOOL', 'Bool'] ? $value = 'true' or $value = true\\n      : $type in ['L'] ? [$map($value, $convertValue)]\\n      : $type in ['NS', 'Ns'] ? [$value.$number()]\\n      : $type in ['NULL', 'Null', 'Nul'] ? null\\n      : $error('Unsupported type: ' & $type);\\n  )};\\n \\n  $unmarshall($account);\\n) %}\"}},\"Assign Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Schedule Destroy Account\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::aws-sdk:ssoadmin:createAccountAssignment\",\"Arguments\":{\"InstanceArn\":\"arn:aws:sso:::instance/ssoins-7223803ee0e299f3\",\"PermissionSetArn\":\"arn:aws:sso:::permissionSet/ssoins-7223803ee0e299f3/ps-9a01fed6153c4518\",\"PrincipalType\":\"USER\",\"PrincipalId\":\"{% $states.input.identity.userId %}\",\"TargetType\":\"AWS_ACCOUNT\",\"TargetId\":\"{% $account.accountId %}\"},\"Output\":\"{% $states.input %}\",\"Credentials\":{\"RoleArn\":\"arn:aws:iam::886436967273:role/VendingMachine\"}},\"Schedule Destroy Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Put Event Success\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::aws-sdk:scheduler:createSchedule\",\"Arguments\":{\"Name\":\"{% $account.accountId & \\\"-destroy\\\"  %}\",\"ScheduleExpression\":\"{% \\\"at(\\\" & $substring($expiresAt, 0, 19) & \\\")\\\" %}\",\"ScheduleExpressionTimezone\":\"UTC\",\"GroupName\":\"VendingMachine\",\"ActionAfterCompletion\":\"DELETE\",\"Target\":{\"Arn\":\"",
+       {
+        "Ref": "ReleaseAccountStateMachineEC3FBD41"
+       },
+       "\",\"Input\":\"{% $string($merge([$states.input, {\\\"init\\\": \\\"auto\\\", \\\"account\\\": $account }])) %}\",\"RoleArn\":\"",
+       {
+        "Fn::GetAtt": [
+         "AssignAccountSchedulerRoleC95074D0",
+         "Arn"
+        ]
+       },
+       "\"},\"FlexibleTimeWindow\":{\"Mode\":\"OFF\"}},\"Output\":\"{% $states.input %}\"},\"Put Event Success\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Done\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::events:putEvents\",\"Arguments\":{\"Entries\":[{\"Detail\":\"{% $string({\\n                  \\\"taskId\\\": $states.input.taskId,\\n                  \\\"status\\\": \\\"SUCCESS\\\",\\n                  \\\"account\\\": $account\\n              }) %}\",\"DetailType\":\"accountAssigned\",\"Source\":\"VendingMachine\",\"EventBusName\":\"",
+       {
+        "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+       },
+       "\"}]},\"Output\":\"{% $states.input %}\"},\"Done\":{\"Type\":\"Succeed\"},\"Account Already Used\":{\"Type\":\"Fail\"}}}"
+      ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "AssignAccountStateMachineRole1C9D38FA",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "AssignAccountStateMachineRoleDefaultPolicy1F88BFF6",
+    "AssignAccountStateMachineRole1C9D38FA"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/AssignAccount/StateMachine/Resource"
+   }
+  },
+  "AssignAccountSchedulerPolicyF967E9D0": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "scheduler:CreateSchedule",
+       "Effect": "Allow",
+       "Resource": "arn:aws:scheduler:us-east-1:481665124648:schedule/VendingMachine/*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AssignAccountSchedulerPolicyF967E9D0",
+    "Roles": [
+     {
+      "Ref": "AssignAccountStateMachineRole1C9D38FA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/AssignAccount/SchedulerPolicy/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11RTW/iQAz9Lb0P04U9rHpkQ1sh7UooabtHZCYmuEnG0dgDQlH++2pCIRWX8fPzx/PTLOz815P98QAnmbmynjW0s32h4GoDJ9n26Ba2/+icyfb+Y5OZTdw15Iq486iJm1DOUfENdg1O/MQtRdgRKLG/NSew9orBo76C4gnOXzJf2VIV3KFFr6ZAFwPp+TVw7EaB78Rg0IntsyaKYkjlK3yBUEG6QeoV7snT9YJ7hr0CeQwTNxiC1vY5XxyNccMNufHKC0rCYQsiqGJX7GoM6xaqZBc11WyOHQsph/NvEDQNV2L7P1zdjFzxYESx20fvkrhsFaROnqBplicpMBzJoVmdPbT83pWguFZszbOTPI5u7hbYPjtwGsmiKLeFgqIZ37/gDuQv3/Q9fwFqTBGdQyzNPyAdBpOjcAy3LVO69zc8mi0UKvLVXd8m8JFKDMn7YDyXaD/l8bhY2PlPO3/4FKJZiF6pRZtf4n9Rbm67kgIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "Orchestration/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputRefAssignAccountStateMachineB5CF396F3B5FAE1F": {
+   "Value": {
+    "Ref": "AssignAccountStateMachineB5CF396F"
+   },
+   "Export": {
+    "Name": "Orchestration:ExportsOutputRefAssignAccountStateMachineB5CF396F3B5FAE1F"
+   }
+  },
+  "ExportsOutputRefReleaseAccountStateMachineEC3FBD41B01FE890": {
+   "Value": {
+    "Ref": "ReleaseAccountStateMachineEC3FBD41"
+   },
+   "Export": {
+    "Name": "Orchestration:ExportsOutputRefReleaseAccountStateMachineEC3FBD41B01FE890"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

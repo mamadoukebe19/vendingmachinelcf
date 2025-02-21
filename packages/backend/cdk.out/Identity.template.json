@@ -1,0 +1,173 @@
+{
+ "Resources": {
+  "AccountVendingMachineE572612F": {
+   "Type": "AWS::Cognito::UserPool",
+   "Properties": {
+    "AccountRecoverySetting": {
+     "RecoveryMechanisms": [
+      {
+       "Name": "verified_phone_number",
+       "Priority": 1
+      },
+      {
+       "Name": "verified_email",
+       "Priority": 2
+      }
+     ]
+    },
+    "AdminCreateUserConfig": {
+     "AllowAdminCreateUserOnly": true
+    },
+    "EmailVerificationMessage": "The verification code to your new account is {####}",
+    "EmailVerificationSubject": "Verify your new account",
+    "Schema": [
+     {
+      "AttributeDataType": "String",
+      "Mutable": false,
+      "Name": "userId"
+     },
+     {
+      "AttributeDataType": "String",
+      "Mutable": false,
+      "Name": "username"
+     }
+    ],
+    "SmsVerificationMessage": "The verification code to your new account is {####}",
+    "VerificationMessageTemplate": {
+     "DefaultEmailOption": "CONFIRM_WITH_CODE",
+     "EmailMessage": "The verification code to your new account is {####}",
+     "EmailSubject": "Verify your new account",
+     "SmsMessage": "The verification code to your new account is {####}"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "Identity/AccountVendingMachine/Resource"
+   }
+  },
+  "AccountVendingMachineDomain194B96FB": {
+   "Type": "AWS::Cognito::UserPoolDomain",
+   "Properties": {
+    "Domain": "my-vending-machinelcf",
+    "UserPoolId": {
+     "Ref": "AccountVendingMachineE572612F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Identity/AccountVendingMachine/Domain/Resource"
+   }
+  },
+  "AccountVendingMachineClient4DE2FBAD": {
+   "Type": "AWS::Cognito::UserPoolClient",
+   "Properties": {
+    "AllowedOAuthFlows": [
+     "code"
+    ],
+    "AllowedOAuthFlowsUserPoolClient": true,
+    "AllowedOAuthScopes": [
+     "email",
+     "openid",
+     "profile"
+    ],
+    "CallbackURLs": [
+     "https://d113qwo20e99le.cloudfront.net"
+    ],
+    "SupportedIdentityProviders": [
+     {
+      "Ref": "SSO22D7F226"
+     }
+    ],
+    "UserPoolId": {
+     "Ref": "AccountVendingMachineE572612F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Identity/AccountVendingMachine/Client/Resource"
+   }
+  },
+  "SSO22D7F226": {
+   "Type": "AWS::Cognito::UserPoolIdentityProvider",
+   "Properties": {
+    "AttributeMapping": {
+     "email": "email",
+     "custom:userId": "userId",
+     "custom:username": "username"
+    },
+    "ProviderDetails": {
+     "IDPSignout": false,
+     "MetadataURL": "https://portal.sso.us-east-1.amazonaws.com/saml/metadata/ODg2NDM2OTY3MjczX2lucy00ZGIzMDIzOGRiNTNiZGVj"
+    },
+    "ProviderName": "aws-sso",
+    "ProviderType": "SAML",
+    "UserPoolId": {
+     "Ref": "AccountVendingMachineE572612F"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Identity/SSO/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12NwQ6CMBBEv4V7uwoejGe8eCMSz6bSahbobtKuEEP4dw9Sg55m5s0kU0C+P8A2M2PUje10jzeYajFNp8wYrw0/CIVhukQXKuZelXf6+mSO7A3SulpIimWPjmQ9WEiKJ+tIUF5V4AGtC7XxP1f//TwrYuugjZuhKCDfQZ61EVGHJwl6B+ePvgE2voBU3wAAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "Identity/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputRefAccountVendingMachineE572612F9FC62FEE": {
+   "Value": {
+    "Ref": "AccountVendingMachineE572612F"
+   },
+   "Export": {
+    "Name": "Identity:ExportsOutputRefAccountVendingMachineE572612F9FC62FEE"
+   }
+  },
+  "ExportsOutputRefAccountVendingMachineClient4DE2FBADF3854CB8": {
+   "Value": {
+    "Ref": "AccountVendingMachineClient4DE2FBAD"
+   },
+   "Export": {
+    "Name": "Identity:ExportsOutputRefAccountVendingMachineClient4DE2FBADF3854CB8"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

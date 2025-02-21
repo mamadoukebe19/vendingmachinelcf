@@ -1,0 +1,4222 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Identity": {
+        "id": "Identity",
+        "path": "Identity",
+        "children": {
+          "AccountVendingMachine": {
+            "id": "AccountVendingMachine",
+            "path": "Identity/AccountVendingMachine",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Identity/AccountVendingMachine/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Cognito::UserPool",
+                  "aws:cdk:cloudformation:props": {
+                    "accountRecoverySetting": {
+                      "recoveryMechanisms": [
+                        {
+                          "name": "verified_phone_number",
+                          "priority": 1
+                        },
+                        {
+                          "name": "verified_email",
+                          "priority": 2
+                        }
+                      ]
+                    },
+                    "adminCreateUserConfig": {
+                      "allowAdminCreateUserOnly": true
+                    },
+                    "emailVerificationMessage": "The verification code to your new account is {####}",
+                    "emailVerificationSubject": "Verify your new account",
+                    "schema": [
+                      {
+                        "name": "userId",
+                        "attributeDataType": "String",
+                        "mutable": false
+                      },
+                      {
+                        "name": "username",
+                        "attributeDataType": "String",
+                        "mutable": false
+                      }
+                    ],
+                    "smsVerificationMessage": "The verification code to your new account is {####}",
+                    "verificationMessageTemplate": {
+                      "defaultEmailOption": "CONFIRM_WITH_CODE",
+                      "emailMessage": "The verification code to your new account is {####}",
+                      "emailSubject": "Verify your new account",
+                      "smsMessage": "The verification code to your new account is {####}"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.CfnUserPool",
+                  "version": "2.179.0"
+                }
+              },
+              "Domain": {
+                "id": "Domain",
+                "path": "Identity/AccountVendingMachine/Domain",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Identity/AccountVendingMachine/Domain/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Cognito::UserPoolDomain",
+                      "aws:cdk:cloudformation:props": {
+                        "domain": "my-vending-machinelcf",
+                        "userPoolId": {
+                          "Ref": "AccountVendingMachineE572612F"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolDomain",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.UserPoolDomain",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Client": {
+                "id": "Client",
+                "path": "Identity/AccountVendingMachine/Client",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Identity/AccountVendingMachine/Client/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Cognito::UserPoolClient",
+                      "aws:cdk:cloudformation:props": {
+                        "allowedOAuthFlows": [
+                          "code"
+                        ],
+                        "allowedOAuthFlowsUserPoolClient": true,
+                        "allowedOAuthScopes": [
+                          "email",
+                          "openid",
+                          "profile"
+                        ],
+                        "callbackUrLs": [
+                          "https://d113qwo20e99le.cloudfront.net"
+                        ],
+                        "supportedIdentityProviders": [
+                          {
+                            "Ref": "SSO22D7F226"
+                          }
+                        ],
+                        "userPoolId": {
+                          "Ref": "AccountVendingMachineE572612F"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolClient",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.UserPoolClient",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cognito.UserPool",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "SSO": {
+            "id": "SSO",
+            "path": "Identity/SSO",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Identity/SSO/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Cognito::UserPoolIdentityProvider",
+                  "aws:cdk:cloudformation:props": {
+                    "attributeMapping": {
+                      "email": "email",
+                      "custom:userId": "userId",
+                      "custom:username": "username"
+                    },
+                    "providerDetails": {
+                      "IDPSignout": false,
+                      "MetadataURL": "https://portal.sso.us-east-1.amazonaws.com/saml/metadata/ODg2NDM2OTY3MjczX2lucy00ZGIzMDIzOGRiNTNiZGVj"
+                    },
+                    "providerName": "aws-sso",
+                    "providerType": "SAML",
+                    "userPoolId": {
+                      "Ref": "AccountVendingMachineE572612F"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolIdentityProvider",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cognito.UserPoolIdentityProviderSaml",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "Identity/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "Identity/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "Identity/Exports",
+            "children": {
+              "Output{\"Ref\":\"AccountVendingMachineE572612F\"}": {
+                "id": "Output{\"Ref\":\"AccountVendingMachineE572612F\"}",
+                "path": "Identity/Exports/Output{\"Ref\":\"AccountVendingMachineE572612F\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              },
+              "Output{\"Ref\":\"AccountVendingMachineClient4DE2FBAD\"}": {
+                "id": "Output{\"Ref\":\"AccountVendingMachineClient4DE2FBAD\"}",
+                "path": "Identity/Exports/Output{\"Ref\":\"AccountVendingMachineClient4DE2FBAD\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "Identity/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.179.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "Identity/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.179.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.179.0"
+        }
+      },
+      "DynamoDB": {
+        "id": "DynamoDB",
+        "path": "DynamoDB",
+        "children": {
+          "Accounts": {
+            "id": "Accounts",
+            "path": "DynamoDB/Accounts",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "DynamoDB/Accounts/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "accountId",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "status",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "assignedTo",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "assignedAt",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "globalSecondaryIndexes": [
+                      {
+                        "indexName": "statusIndex",
+                        "keySchema": [
+                          {
+                            "attributeName": "status",
+                            "keyType": "HASH"
+                          }
+                        ],
+                        "projection": {
+                          "projectionType": "ALL"
+                        }
+                      },
+                      {
+                        "indexName": "userIndex",
+                        "keySchema": [
+                          {
+                            "attributeName": "assignedTo",
+                            "keyType": "HASH"
+                          },
+                          {
+                            "attributeName": "assignedAt",
+                            "keyType": "RANGE"
+                          }
+                        ],
+                        "projection": {
+                          "projectionType": "ALL"
+                        }
+                      }
+                    ],
+                    "keySchema": [
+                      {
+                        "attributeName": "accountId",
+                        "keyType": "HASH"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.179.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "DynamoDB/Accounts/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "DynamoDB/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "DynamoDB/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "DynamoDB/Exports",
+            "children": {
+              "Output{\"Ref\":\"AccountsBE8A900E\"}": {
+                "id": "Output{\"Ref\":\"AccountsBE8A900E\"}",
+                "path": "DynamoDB/Exports/Output{\"Ref\":\"AccountsBE8A900E\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              },
+              "Output{\"Fn::GetAtt\":[\"AccountsBE8A900E\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"AccountsBE8A900E\",\"Arn\"]}",
+                "path": "DynamoDB/Exports/Output{\"Fn::GetAtt\":[\"AccountsBE8A900E\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "DynamoDB/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.179.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "DynamoDB/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.179.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.179.0"
+        }
+      },
+      "EventBus": {
+        "id": "EventBus",
+        "path": "EventBus",
+        "children": {
+          "VendingMachine": {
+            "id": "VendingMachine",
+            "path": "EventBus/VendingMachine",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "EventBus/VendingMachine/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::EventBus",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "EventBusVendingMachine308DEFEB"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_events.CfnEventBus",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_events.EventBus",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "ScheduleGroup": {
+            "id": "ScheduleGroup",
+            "path": "EventBus/ScheduleGroup",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Scheduler::ScheduleGroup",
+              "aws:cdk:cloudformation:props": {
+                "name": "VendingMachine"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_scheduler.CfnScheduleGroup",
+              "version": "2.179.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "EventBus/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "EventBus/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "EventBus/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"VendingMachine168CF2DD\",\"Arn\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"VendingMachine168CF2DD\",\"Arn\"]}",
+                "path": "EventBus/Exports/Output{\"Fn::GetAtt\":[\"VendingMachine168CF2DD\",\"Arn\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              },
+              "Output{\"Ref\":\"VendingMachine168CF2DD\"}": {
+                "id": "Output{\"Ref\":\"VendingMachine168CF2DD\"}",
+                "path": "EventBus/Exports/Output{\"Ref\":\"VendingMachine168CF2DD\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "EventBus/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.179.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "EventBus/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.179.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.179.0"
+        }
+      },
+      "Orchestration": {
+        "id": "Orchestration",
+        "path": "Orchestration",
+        "children": {
+          "ReleaseAccount": {
+            "id": "ReleaseAccount",
+            "path": "Orchestration/ReleaseAccount",
+            "children": {
+              "Vpc": {
+                "id": "Vpc",
+                "path": "Orchestration/ReleaseAccount/Vpc",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/ReleaseAccount/Vpc/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::VPC",
+                      "aws:cdk:cloudformation:props": {
+                        "cidrBlock": "10.0.0.0/16",
+                        "enableDnsHostnames": true,
+                        "enableDnsSupport": true,
+                        "instanceTenancy": "default",
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Orchestration/ReleaseAccount/Vpc"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnVPC",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "PublicSubnet1": {
+                    "id": "PublicSubnet1",
+                    "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1",
+                    "children": {
+                      "Subnet": {
+                        "id": "Subnet",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/Subnet",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                          "aws:cdk:cloudformation:props": {
+                            "availabilityZone": "us-east-1a",
+                            "cidrBlock": "10.0.0.0/18",
+                            "mapPublicIpOnLaunch": true,
+                            "tags": [
+                              {
+                                "key": "aws-cdk:subnet-name",
+                                "value": "Public"
+                              },
+                              {
+                                "key": "aws-cdk:subnet-type",
+                                "value": "Public"
+                              },
+                              {
+                                "key": "Name",
+                                "value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1"
+                              }
+                            ],
+                            "vpcId": {
+                              "Ref": "ReleaseAccountVpc7FE5BCA2"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "Acl": {
+                        "id": "Acl",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/Acl",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      },
+                      "RouteTable": {
+                        "id": "RouteTable",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/RouteTable",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                          "aws:cdk:cloudformation:props": {
+                            "tags": [
+                              {
+                                "key": "Name",
+                                "value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1"
+                              }
+                            ],
+                            "vpcId": {
+                              "Ref": "ReleaseAccountVpc7FE5BCA2"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "RouteTableAssociation": {
+                        "id": "RouteTableAssociation",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/RouteTableAssociation",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                          "aws:cdk:cloudformation:props": {
+                            "routeTableId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet1RouteTable860E178A"
+                            },
+                            "subnetId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet1SubnetCBDC8D79"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "DefaultRoute": {
+                        "id": "DefaultRoute",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet1/DefaultRoute",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                          "aws:cdk:cloudformation:props": {
+                            "destinationCidrBlock": "0.0.0.0/0",
+                            "gatewayId": {
+                              "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+                            },
+                            "routeTableId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet1RouteTable860E178A"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "PublicSubnet2": {
+                    "id": "PublicSubnet2",
+                    "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2",
+                    "children": {
+                      "Subnet": {
+                        "id": "Subnet",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/Subnet",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                          "aws:cdk:cloudformation:props": {
+                            "availabilityZone": "us-east-1b",
+                            "cidrBlock": "10.0.64.0/18",
+                            "mapPublicIpOnLaunch": true,
+                            "tags": [
+                              {
+                                "key": "aws-cdk:subnet-name",
+                                "value": "Public"
+                              },
+                              {
+                                "key": "aws-cdk:subnet-type",
+                                "value": "Public"
+                              },
+                              {
+                                "key": "Name",
+                                "value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2"
+                              }
+                            ],
+                            "vpcId": {
+                              "Ref": "ReleaseAccountVpc7FE5BCA2"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "Acl": {
+                        "id": "Acl",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/Acl",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      },
+                      "RouteTable": {
+                        "id": "RouteTable",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/RouteTable",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                          "aws:cdk:cloudformation:props": {
+                            "tags": [
+                              {
+                                "key": "Name",
+                                "value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2"
+                              }
+                            ],
+                            "vpcId": {
+                              "Ref": "ReleaseAccountVpc7FE5BCA2"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "RouteTableAssociation": {
+                        "id": "RouteTableAssociation",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/RouteTableAssociation",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                          "aws:cdk:cloudformation:props": {
+                            "routeTableId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet2RouteTableF9CCB2F1"
+                            },
+                            "subnetId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet2SubnetCDB2D143"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "DefaultRoute": {
+                        "id": "DefaultRoute",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet2/DefaultRoute",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                          "aws:cdk:cloudformation:props": {
+                            "destinationCidrBlock": "0.0.0.0/0",
+                            "gatewayId": {
+                              "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+                            },
+                            "routeTableId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet2RouteTableF9CCB2F1"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "PublicSubnet3": {
+                    "id": "PublicSubnet3",
+                    "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3",
+                    "children": {
+                      "Subnet": {
+                        "id": "Subnet",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/Subnet",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::Subnet",
+                          "aws:cdk:cloudformation:props": {
+                            "availabilityZone": "us-east-1c",
+                            "cidrBlock": "10.0.128.0/18",
+                            "mapPublicIpOnLaunch": true,
+                            "tags": [
+                              {
+                                "key": "aws-cdk:subnet-name",
+                                "value": "Public"
+                              },
+                              {
+                                "key": "aws-cdk:subnet-type",
+                                "value": "Public"
+                              },
+                              {
+                                "key": "Name",
+                                "value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3"
+                              }
+                            ],
+                            "vpcId": {
+                              "Ref": "ReleaseAccountVpc7FE5BCA2"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSubnet",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "Acl": {
+                        "id": "Acl",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/Acl",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      },
+                      "RouteTable": {
+                        "id": "RouteTable",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/RouteTable",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::RouteTable",
+                          "aws:cdk:cloudformation:props": {
+                            "tags": [
+                              {
+                                "key": "Name",
+                                "value": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3"
+                              }
+                            ],
+                            "vpcId": {
+                              "Ref": "ReleaseAccountVpc7FE5BCA2"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnRouteTable",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "RouteTableAssociation": {
+                        "id": "RouteTableAssociation",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/RouteTableAssociation",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::SubnetRouteTableAssociation",
+                          "aws:cdk:cloudformation:props": {
+                            "routeTableId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet3RouteTableA0DB7667"
+                            },
+                            "subnetId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet3SubnetD71F9F84"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnSubnetRouteTableAssociation",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "DefaultRoute": {
+                        "id": "DefaultRoute",
+                        "path": "Orchestration/ReleaseAccount/Vpc/PublicSubnet3/DefaultRoute",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::EC2::Route",
+                          "aws:cdk:cloudformation:props": {
+                            "destinationCidrBlock": "0.0.0.0/0",
+                            "gatewayId": {
+                              "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+                            },
+                            "routeTableId": {
+                              "Ref": "ReleaseAccountVpcPublicSubnet3RouteTableA0DB7667"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ec2.CfnRoute",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.PublicSubnet",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "IGW": {
+                    "id": "IGW",
+                    "path": "Orchestration/ReleaseAccount/Vpc/IGW",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::InternetGateway",
+                      "aws:cdk:cloudformation:props": {
+                        "tags": [
+                          {
+                            "key": "Name",
+                            "value": "Orchestration/ReleaseAccount/Vpc"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnInternetGateway",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "VPCGW": {
+                    "id": "VPCGW",
+                    "path": "Orchestration/ReleaseAccount/Vpc/VPCGW",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::VPCGatewayAttachment",
+                      "aws:cdk:cloudformation:props": {
+                        "internetGatewayId": {
+                          "Ref": "ReleaseAccountVpcIGWBC2CCC8D"
+                        },
+                        "vpcId": {
+                          "Ref": "ReleaseAccountVpc7FE5BCA2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnVPCGatewayAttachment",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "RestrictDefaultSecurityGroupCustomResource": {
+                    "id": "RestrictDefaultSecurityGroupCustomResource",
+                    "path": "Orchestration/ReleaseAccount/Vpc/RestrictDefaultSecurityGroupCustomResource",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "Orchestration/ReleaseAccount/Vpc/RestrictDefaultSecurityGroupCustomResource/Default",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CustomResource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.Vpc",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "SecurityGroup": {
+                "id": "SecurityGroup",
+                "path": "Orchestration/ReleaseAccount/SecurityGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/ReleaseAccount/SecurityGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::EC2::SecurityGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "groupDescription": "Orchestration/ReleaseAccount/SecurityGroup",
+                        "securityGroupEgress": [
+                          {
+                            "cidrIp": "0.0.0.0/0",
+                            "description": "Allow all outbound traffic by default",
+                            "ipProtocol": "-1"
+                          }
+                        ],
+                        "vpcId": {
+                          "Ref": "ReleaseAccountVpc7FE5BCA2"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ec2.CfnSecurityGroup",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ec2.SecurityGroup",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Cluster": {
+                "id": "Cluster",
+                "path": "Orchestration/ReleaseAccount/Cluster",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/ReleaseAccount/Cluster/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::Cluster",
+                      "aws:cdk:cloudformation:props": {}
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecs.CfnCluster",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.Cluster",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "AWSNuke": {
+                "id": "AWSNuke",
+                "path": "Orchestration/ReleaseAccount/AWSNuke",
+                "children": {
+                  "TaskRole": {
+                    "id": "TaskRole",
+                    "path": "Orchestration/ReleaseAccount/AWSNuke/TaskRole",
+                    "children": {
+                      "ImportTaskRole": {
+                        "id": "ImportTaskRole",
+                        "path": "Orchestration/ReleaseAccount/AWSNuke/TaskRole/ImportTaskRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Orchestration/ReleaseAccount/AWSNuke/TaskRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "ecs-tasks.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "Orchestration/ReleaseAccount/AWSNuke/TaskRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "Orchestration/ReleaseAccount/AWSNuke/TaskRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Resource": "arn:aws:iam::*:role/AWSNukeRole"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "ReleaseAccountAWSNukeTaskRoleDefaultPolicyCBAA227A",
+                                "roles": [
+                                  {
+                                    "Ref": "ReleaseAccountAWSNukeTaskRoleC11C62E6"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.179.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/ReleaseAccount/AWSNuke/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::ECS::TaskDefinition",
+                      "aws:cdk:cloudformation:props": {
+                        "containerDefinitions": [
+                          {
+                            "essential": true,
+                            "image": {
+                              "Fn::Sub": "481665124648.dkr.ecr.us-east-1.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-481665124648-us-east-1:e75dddb720883467888b57b094ffb06b96de6f24ea38c4baa1a27093d222ca05"
+                            },
+                            "name": "aws-nuke",
+                            "logConfiguration": {
+                              "logDriver": "awslogs",
+                              "options": {
+                                "awslogs-group": {
+                                  "Ref": "ReleaseAccountAWSNukeLogGroupC8957D3D"
+                                },
+                                "awslogs-stream-prefix": "aws-nuke",
+                                "awslogs-region": "us-east-1"
+                              }
+                            }
+                          }
+                        ],
+                        "cpu": "256",
+                        "executionRoleArn": {
+                          "Fn::GetAtt": [
+                            "ReleaseAccountAWSNukeExecutionRole02EE0B84",
+                            "Arn"
+                          ]
+                        },
+                        "family": "OrchestrationReleaseAccountAWSNuke6B2F8DDC",
+                        "memory": "512",
+                        "networkMode": "awsvpc",
+                        "requiresCompatibilities": [
+                          "FARGATE"
+                        ],
+                        "runtimePlatform": {
+                          "cpuArchitecture": "ARM64",
+                          "operatingSystemFamily": "LINUX"
+                        },
+                        "taskRoleArn": {
+                          "Fn::GetAtt": [
+                            "ReleaseAccountAWSNukeTaskRoleC11C62E6",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecs.CfnTaskDefinition",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "aws-nuke": {
+                    "id": "aws-nuke",
+                    "path": "Orchestration/ReleaseAccount/AWSNuke/aws-nuke",
+                    "children": {
+                      "AssetImage": {
+                        "id": "AssetImage",
+                        "path": "Orchestration/ReleaseAccount/AWSNuke/aws-nuke/AssetImage",
+                        "children": {
+                          "Staging": {
+                            "id": "Staging",
+                            "path": "Orchestration/ReleaseAccount/AWSNuke/aws-nuke/AssetImage/Staging",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.AssetStaging",
+                              "version": "2.179.0"
+                            }
+                          },
+                          "Repository": {
+                            "id": "Repository",
+                            "path": "Orchestration/ReleaseAccount/AWSNuke/aws-nuke/AssetImage/Repository",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_ecr.RepositoryBase",
+                              "version": "2.179.0",
+                              "metadata": []
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_ecr_assets.DockerImageAsset",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecs.ContainerDefinition",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "ExecutionRole": {
+                    "id": "ExecutionRole",
+                    "path": "Orchestration/ReleaseAccount/AWSNuke/ExecutionRole",
+                    "children": {
+                      "ImportExecutionRole": {
+                        "id": "ImportExecutionRole",
+                        "path": "Orchestration/ReleaseAccount/AWSNuke/ExecutionRole/ImportExecutionRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Orchestration/ReleaseAccount/AWSNuke/ExecutionRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "ecs-tasks.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "Orchestration/ReleaseAccount/AWSNuke/ExecutionRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "Orchestration/ReleaseAccount/AWSNuke/ExecutionRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "ecr:BatchCheckLayerAvailability",
+                                        "ecr:BatchGetImage",
+                                        "ecr:GetDownloadUrlForLayer"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "arn:aws:ecr:us-east-1:481665124648:repository/cdk-hnb659fds-container-assets-481665124648-us-east-1"
+                                    },
+                                    {
+                                      "Action": "ecr:GetAuthorizationToken",
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": [
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::GetAtt": [
+                                          "ReleaseAccountAWSNukeLogGroupC8957D3D",
+                                          "Arn"
+                                        ]
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "ReleaseAccountAWSNukeExecutionRoleDefaultPolicyCCD5208D",
+                                "roles": [
+                                  {
+                                    "Ref": "ReleaseAccountAWSNukeExecutionRole02EE0B84"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.179.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecs.FargateTaskDefinition",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "MutableRoleAWSNukeRole": {
+                "id": "MutableRoleAWSNukeRole",
+                "path": "Orchestration/ReleaseAccount/MutableRoleAWSNukeRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "AWSNukeRole": {
+                "id": "AWSNukeRole",
+                "path": "Orchestration/ReleaseAccount/AWSNukeRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "AWSNukeLogGroup": {
+                "id": "AWSNukeLogGroup",
+                "path": "Orchestration/ReleaseAccount/AWSNukeLogGroup",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/ReleaseAccount/AWSNukeLogGroup/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Logs::LogGroup",
+                      "aws:cdk:cloudformation:props": {
+                        "retentionInDays": 731
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_logs.CfnLogGroup",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.LogGroup",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "MutableRoleManagementAccountRole": {
+                "id": "MutableRoleManagementAccountRole",
+                "path": "Orchestration/ReleaseAccount/MutableRoleManagementAccountRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "ManagementAccountRole": {
+                "id": "ManagementAccountRole",
+                "path": "Orchestration/ReleaseAccount/ManagementAccountRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Remove Account Access": {
+                "id": "Remove Account Access",
+                "path": "Orchestration/ReleaseAccount/Remove Account Access",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.CallAwsService",
+                  "version": "2.179.0"
+                }
+              },
+              "Unassign Account": {
+                "id": "Unassign Account",
+                "path": "Orchestration/ReleaseAccount/Unassign Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.DynamoUpdateItem",
+                  "version": "2.179.0"
+                }
+              },
+              "Nuke Account": {
+                "id": "Nuke Account",
+                "path": "Orchestration/ReleaseAccount/Nuke Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.EcsRunTask",
+                  "version": "2.179.0"
+                }
+              },
+              "Release Account": {
+                "id": "Release Account",
+                "path": "Orchestration/ReleaseAccount/Release Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.DynamoUpdateItem",
+                  "version": "2.179.0"
+                }
+              },
+              "Is User Initiated?": {
+                "id": "Is User Initiated?",
+                "path": "Orchestration/ReleaseAccount/Is User Initiated?",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.Choice",
+                  "version": "2.179.0"
+                }
+              },
+              "Unschedule Destroy Account": {
+                "id": "Unschedule Destroy Account",
+                "path": "Orchestration/ReleaseAccount/Unschedule Destroy Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "StateMachine": {
+                "id": "StateMachine",
+                "path": "Orchestration/ReleaseAccount/StateMachine",
+                "children": {
+                  "Role": {
+                    "id": "Role",
+                    "path": "Orchestration/ReleaseAccount/StateMachine/Role",
+                    "children": {
+                      "ImportRole": {
+                        "id": "ImportRole",
+                        "path": "Orchestration/ReleaseAccount/StateMachine/Role/ImportRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Orchestration/ReleaseAccount/StateMachine/Role/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "states.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "Orchestration/ReleaseAccount/StateMachine/Role/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "Orchestration/ReleaseAccount/StateMachine/Role/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "ssoadmin:deleteAccountAssignment",
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        "arn:aws:sso:::instance/ssoins-7223803ee0e299f3",
+                                        "arn:aws:sso:::permissionSet/ssoins-7223803ee0e299f3/ps-9a01fed6153c4518"
+                                      ]
+                                    },
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Resource": "arn:aws:iam::886436967273:role/VendingMachine"
+                                    },
+                                    {
+                                      "Action": "dynamodb:UpdateItem",
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            "arn:aws:dynamodb:us-east-1:481665124648:table/",
+                                            {
+                                              "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+                                            }
+                                          ]
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Action": "ecs:RunTask",
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Ref": "ReleaseAccountAWSNuke87F80E57"
+                                      }
+                                    },
+                                    {
+                                      "Action": [
+                                        "ecs:DescribeTasks",
+                                        "ecs:StopTask"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": "iam:PassRole",
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "ReleaseAccountAWSNukeExecutionRole02EE0B84",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::GetAtt": [
+                                            "ReleaseAccountAWSNukeTaskRoleC11C62E6",
+                                            "Arn"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Action": [
+                                        "events:DescribeRule",
+                                        "events:PutRule",
+                                        "events:PutTargets"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "arn:aws:events:us-east-1:481665124648:rule/StepFunctionsGetEventsForECSTaskRule"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "ReleaseAccountStateMachineRoleDefaultPolicy2EEC1E01",
+                                "roles": [
+                                  {
+                                    "Ref": "ReleaseAccountStateMachineRoleFCCD337E"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.179.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/ReleaseAccount/StateMachine/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::StepFunctions::StateMachine",
+                      "aws:cdk:cloudformation:props": {
+                        "definitionString": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"StartAt\":\"Is User Initiated?\",\"States\":{\"Is User Initiated?\":{\"Type\":\"Choice\",\"QueryLanguage\":\"JSONata\",\"Choices\":[{\"Condition\":\"{% $states.input.init = \\\"user\\\" %}\",\"Next\":\"Unschedule Destroy Account\"}],\"Default\":\"Remove Account Access\"},\"Remove Account Access\":{\"Next\":\"Unassign Account\",\"Type\":\"Task\",\"ResultPath\":\"$.removeAccessResult\",\"Credentials\":{\"RoleArn\":\"arn:aws:iam::886436967273:role/VendingMachine\"},\"Resource\":\"arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":states:::aws-sdk:ssoadmin:deleteAccountAssignment\",\"Parameters\":{\"InstanceArn\":\"arn:aws:sso:::instance/ssoins-7223803ee0e299f3\",\"PermissionSetArn\":\"arn:aws:sso:::permissionSet/ssoins-7223803ee0e299f3/ps-9a01fed6153c4518\",\"PrincipalType\":\"USER\",\"PrincipalId.$\":\"$.identity.userId\",\"TargetType\":\"AWS_ACCOUNT\",\"TargetId.$\":\"$.account.accountId\"}},\"Unschedule Destroy Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Remove Account Access\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::aws-sdk:scheduler:deleteSchedule\",\"Arguments\":{\"Name\":\"{% $states.input.account.accountId & \\\"-destroy\\\"  %}\",\"GroupName\":\"VendingMachine\"},\"Output\":\"{% $states.input %}\"},\"Unassign Account\":{\"Next\":\"Nuke Account\",\"Type\":\"Task\",\"ResultPath\":\"$.freeResult\",\"Resource\":\"arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":states:::dynamodb:updateItem\",\"Parameters\":{\"Key\":{\"accountId\":{\"S.$\":\"$.account.accountId\"}},\"TableName\":\"",
+                              {
+                                "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+                              },
+                              "\",\"ExpressionAttributeNames\":{\"#name\":\"name\",\"#status\":\"status\",\"#updatedAt\":\"updatedAt\",\"#assignedTo\":\"assignedTo\",\"#assignedAt\":\"assignedAt\",\"#expiresAt\":\"expiresAt\"},\"ExpressionAttributeValues\":{\":status\":{\"S\":\"DESTROYING\"},\":updatedAt\":{\"S.$\":\"$$.State.EnteredTime\"}},\"UpdateExpression\":\"SET #status = :status, #updatedAt = :updatedAt REMOVE #name, #assignedTo, #assignedAt, #expiresAt\"}},\"Nuke Account\":{\"Next\":\"Release Account\",\"Type\":\"Task\",\"ResultPath\":\"$.nukeResult\",\"Resource\":\"arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":states:::ecs:runTask.sync\",\"Parameters\":{\"Cluster\":\"",
+                              {
+                                "Fn::GetAtt": [
+                                  "ReleaseAccountCluster7421C8B9",
+                                  "Arn"
+                                ]
+                              },
+                              "\",\"TaskDefinition\":\"OrchestrationReleaseAccountAWSNuke6B2F8DDC\",\"NetworkConfiguration\":{\"AwsvpcConfiguration\":{\"AssignPublicIp\":\"ENABLED\",\"Subnets\":[\"",
+                              {
+                                "Ref": "ReleaseAccountVpcPublicSubnet1SubnetCBDC8D79"
+                              },
+                              "\",\"",
+                              {
+                                "Ref": "ReleaseAccountVpcPublicSubnet2SubnetCDB2D143"
+                              },
+                              "\",\"",
+                              {
+                                "Ref": "ReleaseAccountVpcPublicSubnet3SubnetD71F9F84"
+                              },
+                              "\"],\"SecurityGroups\":[\"",
+                              {
+                                "Fn::GetAtt": [
+                                  "ReleaseAccountSecurityGroup77108A68",
+                                  "GroupId"
+                                ]
+                              },
+                              "\"]}},\"Overrides\":{\"ContainerOverrides\":[{\"Name\":\"aws-nuke\",\"Environment\":[{\"Name\":\"AWS_NUKE_ACCOUNT_ID\",\"Value.$\":\"$.account.accountId\"}]}]},\"LaunchType\":\"FARGATE\"}},\"Release Account\":{\"End\":true,\"Type\":\"Task\",\"ResultPath\":\"$.freeResult\",\"Resource\":\"arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":states:::dynamodb:updateItem\",\"Parameters\":{\"Key\":{\"accountId\":{\"S.$\":\"$.account.accountId\"}},\"TableName\":\"",
+                              {
+                                "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+                              },
+                              "\",\"ExpressionAttributeNames\":{\"#status\":\"status\",\"#updatedAt\":\"updatedAt\"},\"ExpressionAttributeValues\":{\":status\":{\"S\":\"FREE\"},\":updatedAt\":{\"S.$\":\"$$.State.EnteredTime\"}},\"UpdateExpression\":\"SET #status = :status, #updatedAt = :updatedAt\"}}}}"
+                            ]
+                          ]
+                        },
+                        "roleArn": {
+                          "Fn::GetAtt": [
+                            "ReleaseAccountStateMachineRoleFCCD337E",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_stepfunctions.CfnStateMachine",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.StateMachine",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "SchedulerPolicy": {
+                "id": "SchedulerPolicy",
+                "path": "Orchestration/ReleaseAccount/SchedulerPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/ReleaseAccount/SchedulerPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": [
+                                "scheduler:CreateSchedule",
+                                "scheduler:DeleteSchedule"
+                              ],
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:scheduler:us-east-1:481665124648:schedule/VendingMachine/*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "ReleaseAccountSchedulerPolicy0701BD64",
+                        "roles": [
+                          {
+                            "Ref": "ReleaseAccountStateMachineRoleFCCD337E"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "Custom::VpcRestrictDefaultSGCustomResourceProvider": {
+            "id": "Custom::VpcRestrictDefaultSGCustomResourceProvider",
+            "path": "Orchestration/Custom::VpcRestrictDefaultSGCustomResourceProvider",
+            "children": {
+              "Staging": {
+                "id": "Staging",
+                "path": "Orchestration/Custom::VpcRestrictDefaultSGCustomResourceProvider/Staging",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.179.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "Orchestration/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "Orchestration/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+              "version": "2.179.0"
+            }
+          },
+          "AssignAccount": {
+            "id": "AssignAccount",
+            "path": "Orchestration/AssignAccount",
+            "children": {
+              "Get Free Account": {
+                "id": "Get Free Account",
+                "path": "Orchestration/AssignAccount/Get Free Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions_tasks.CallAwsService",
+                  "version": "2.179.0"
+                }
+              },
+              "Unmarshall Account": {
+                "id": "Unmarshall Account",
+                "path": "Orchestration/AssignAccount/Unmarshall Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "Assign Values": {
+                "id": "Assign Values",
+                "path": "Orchestration/AssignAccount/Assign Values",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "Lock Account": {
+                "id": "Lock Account",
+                "path": "Orchestration/AssignAccount/Lock Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "Account Already Used": {
+                "id": "Account Already Used",
+                "path": "Orchestration/AssignAccount/Account Already Used",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.Fail",
+                  "version": "2.179.0"
+                }
+              },
+              "Unmarshall Updated Account": {
+                "id": "Unmarshall Updated Account",
+                "path": "Orchestration/AssignAccount/Unmarshall Updated Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "Assign Account": {
+                "id": "Assign Account",
+                "path": "Orchestration/AssignAccount/Assign Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "SchedulerRole": {
+                "id": "SchedulerRole",
+                "path": "Orchestration/AssignAccount/SchedulerRole",
+                "children": {
+                  "ImportSchedulerRole": {
+                    "id": "ImportSchedulerRole",
+                    "path": "Orchestration/AssignAccount/SchedulerRole/ImportSchedulerRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/AssignAccount/SchedulerRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "scheduler.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "Orchestration/AssignAccount/SchedulerRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Orchestration/AssignAccount/SchedulerRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "states:StartExecution",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Ref": "ReleaseAccountStateMachineEC3FBD41"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "AssignAccountSchedulerRoleDefaultPolicy0BEC1381",
+                            "roles": [
+                              {
+                                "Ref": "AssignAccountSchedulerRoleC95074D0"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Schedule Destroy Account": {
+                "id": "Schedule Destroy Account",
+                "path": "Orchestration/AssignAccount/Schedule Destroy Account",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "Put Event Success": {
+                "id": "Put Event Success",
+                "path": "Orchestration/AssignAccount/Put Event Success",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "Done": {
+                "id": "Done",
+                "path": "Orchestration/AssignAccount/Done",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.Succeed",
+                  "version": "2.179.0"
+                }
+              },
+              "Put Event Failed": {
+                "id": "Put Event Failed",
+                "path": "Orchestration/AssignAccount/Put Event Failed",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.CustomState",
+                  "version": "2.179.0"
+                }
+              },
+              "Account Found?": {
+                "id": "Account Found?",
+                "path": "Orchestration/AssignAccount/Account Found?",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.Choice",
+                  "version": "2.179.0"
+                }
+              },
+              "Wait": {
+                "id": "Wait",
+                "path": "Orchestration/AssignAccount/Wait",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.Wait",
+                  "version": "2.179.0"
+                }
+              },
+              "StateMachine": {
+                "id": "StateMachine",
+                "path": "Orchestration/AssignAccount/StateMachine",
+                "children": {
+                  "Role": {
+                    "id": "Role",
+                    "path": "Orchestration/AssignAccount/StateMachine/Role",
+                    "children": {
+                      "ImportRole": {
+                        "id": "ImportRole",
+                        "path": "Orchestration/AssignAccount/StateMachine/Role/ImportRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      },
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Orchestration/AssignAccount/StateMachine/Role/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "states.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "Orchestration/AssignAccount/StateMachine/Role/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "Orchestration/AssignAccount/StateMachine/Role/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "dynamodb:query",
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::Join": [
+                                          "",
+                                          [
+                                            {
+                                              "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+                                            },
+                                            "/index/statusIndex"
+                                          ]
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Resource": "arn:aws:iam::886436967273:role/VendingMachine"
+                                    },
+                                    {
+                                      "Action": "events:PutEvents",
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::ImportValue": "EventBus:ExportsOutputFnGetAttVendingMachine168CF2DDArn8993BE4F"
+                                      }
+                                    },
+                                    {
+                                      "Action": "iam:PassRole",
+                                      "Effect": "Allow",
+                                      "Resource": {
+                                        "Fn::GetAtt": [
+                                          "AssignAccountSchedulerRoleC95074D0",
+                                          "Arn"
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Action": [
+                                        "dynamodb:BatchGetItem",
+                                        "dynamodb:BatchWriteItem",
+                                        "dynamodb:ConditionCheckItem",
+                                        "dynamodb:DeleteItem",
+                                        "dynamodb:DescribeTable",
+                                        "dynamodb:GetItem",
+                                        "dynamodb:GetRecords",
+                                        "dynamodb:GetShardIterator",
+                                        "dynamodb:PutItem",
+                                        "dynamodb:Query",
+                                        "dynamodb:Scan",
+                                        "dynamodb:UpdateItem"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+                                              },
+                                              "/index/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "AssignAccountStateMachineRoleDefaultPolicy1F88BFF6",
+                                "roles": [
+                                  {
+                                    "Ref": "AssignAccountStateMachineRole1C9D38FA"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.179.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/AssignAccount/StateMachine/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::StepFunctions::StateMachine",
+                      "aws:cdk:cloudformation:props": {
+                        "definitionString": {
+                          "Fn::Join": [
+                            "",
+                            [
+                              "{\"StartAt\":\"Get Free Account\",\"States\":{\"Get Free Account\":{\"Next\":\"Unmarshall Account\",\"Type\":\"Task\",\"ResultPath\":\"$.account\",\"Resource\":\"arn:",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              ":states:::aws-sdk:dynamodb:query\",\"Parameters\":{\"TableName\":\"",
+                              {
+                                "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+                              },
+                              "\",\"IndexName\":\"statusIndex\",\"KeyConditionExpression\":\"#status = :status\",\"ExpressionAttributeNames\":{\"#status\":\"status\"},\"ExpressionAttributeValues\":{\":status\":{\"S\":\"FREE\"}},\"Limit\":1}},\"Unmarshall Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Account Found?\",\"Type\":\"Pass\",\"Assign\":{\"account\":\"{% (\\n  $unmarshall := function ($object) {(\\n    $not($exists($object)) or $object = null ? null :\\n    $type($object) = 'array' ?\\n      [$map($object, $unmarshall)]\\n      : $type($object) = 'object' ?\\n        $merge($each($object, function ($val, $key) {\\n              { $key: $convertValue($val) }\\n          })\\n        )\\n      : $object;\\n  )};\\n\\n  $convertValue := function ($object) {(\\n    $type := $keys($object)[0];\\n    $value := $lookup($object, $type);\\n  \\n    $type in ['S', 'SS', 'Ss', 'B', 'BS', 'Bs'] ?  $value\\n      : $type in ['N'] ? $number($value)\\n      : $type in ['M'] ? $unmarshall($value)\\n      : $type in ['BOOL', 'Bool'] ? $value = 'true' or $value = true\\n      : $type in ['L'] ? [$map($value, $convertValue)]\\n      : $type in ['NS', 'Ns'] ? [$value.$number()]\\n      : $type in ['NULL', 'Null', 'Nul'] ? null\\n      : $error('Unsupported type: ' & $type);\\n  )};\\n \\n  $unmarshall($states.input.account.Items[0]);\\n) %}\"}},\"Account Found?\":{\"Type\":\"Choice\",\"QueryLanguage\":\"JSONata\",\"Choices\":[{\"Condition\":\"{% $boolean($account) %}\",\"Next\":\"Assign Values\"}],\"Default\":\"Wait\"},\"Wait\":{\"Type\":\"Wait\",\"Seconds\":2,\"Next\":\"Put Event Failed\"},\"Put Event Failed\":{\"QueryLanguage\":\"JSONata\",\"End\":true,\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::events:putEvents\",\"Arguments\":{\"Entries\":[{\"Detail\":\"{% $string({\\n                  \\\"taskId\\\": $states.input.taskId,\\n                  \\\"message\\\": \\\"No available account.\\\",\\n                  \\\"status\\\": \\\"FAILED\\\"\\n              }) %}\",\"DetailType\":\"accountAssignationFailed\",\"Source\":\"VendingMachine\",\"EventBusName\":\"",
+                              {
+                                "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+                              },
+                              "\"}]},\"Output\":\"{% $states.input %}\"},\"Assign Values\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Lock Account\",\"Type\":\"Pass\",\"Assign\":{\"expiresAt\":\"{% $fromMillis($millis() + $states.input.expiration * 24 * 60 * 60 * 1000) %}\"}},\"Lock Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Unmarshall Updated Account\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::dynamodb:updateItem\",\"Assign\":{\"account\":\"{% $states.result.Attributes %}\"},\"Arguments\":{\"Key\":{\"accountId\":{\"S\":\"{% $account.accountId %}\"}},\"TableName\":\"",
+                              {
+                                "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+                              },
+                              "\",\"ConditionExpression\":\"#status = :free\",\"ExpressionAttributeNames\":{\"#name\":\"name\",\"#status\":\"status\",\"#updatedAt\":\"updatedAt\",\"#assignedAt\":\"assignedAt\",\"#assignedTo\":\"assignedTo\",\"#expiresAt\":\"expiresAt\"},\"ExpressionAttributeValues\":{\":name\":{\"S\":\"{% $states.input.name %}\"},\":status\":{\"S\":\"USED\"},\":free\":{\"S\":\"FREE\"},\":updatedAt\":{\"S\":\"{% $now() %}\"},\":assignedAt\":{\"S\":\"{% $now() %}\"},\":assignedTo\":{\"S\":\"{% $states.input.identity.userId %}\"},\":expiresAt\":{\"S\":\"{% $expiresAt %}\"}},\"ReturnValues\":\"ALL_NEW\",\"UpdateExpression\":\"SET #name = :name, #status = :status, #updatedAt = :updatedAt, #assignedAt = :assignedAt, #assignedTo = :assignedTo, #expiresAt = :expiresAt\"},\"Output\":\"{% $states.input %}\",\"Catch\":[{\"ErrorEquals\":[\"ConditionalCheckFailedException\"],\"Next\":\"Account Already Used\"}]},\"Unmarshall Updated Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Assign Account\",\"Type\":\"Pass\",\"Assign\":{\"account\":\"{% (\\n  $unmarshall := function ($object) {(\\n    $not($exists($object)) or $object = null ? null :\\n    $type($object) = 'array' ?\\n      [$map($object, $unmarshall)]\\n      : $type($object) = 'object' ?\\n        $merge($each($object, function ($val, $key) {\\n              { $key: $convertValue($val) }\\n          })\\n        )\\n      : $object;\\n  )};\\n\\n  $convertValue := function ($object) {(\\n    $type := $keys($object)[0];\\n    $value := $lookup($object, $type);\\n  \\n    $type in ['S', 'SS', 'Ss', 'B', 'BS', 'Bs'] ?  $value\\n      : $type in ['N'] ? $number($value)\\n      : $type in ['M'] ? $unmarshall($value)\\n      : $type in ['BOOL', 'Bool'] ? $value = 'true' or $value = true\\n      : $type in ['L'] ? [$map($value, $convertValue)]\\n      : $type in ['NS', 'Ns'] ? [$value.$number()]\\n      : $type in ['NULL', 'Null', 'Nul'] ? null\\n      : $error('Unsupported type: ' & $type);\\n  )};\\n \\n  $unmarshall($account);\\n) %}\"}},\"Assign Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Schedule Destroy Account\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::aws-sdk:ssoadmin:createAccountAssignment\",\"Arguments\":{\"InstanceArn\":\"arn:aws:sso:::instance/ssoins-7223803ee0e299f3\",\"PermissionSetArn\":\"arn:aws:sso:::permissionSet/ssoins-7223803ee0e299f3/ps-9a01fed6153c4518\",\"PrincipalType\":\"USER\",\"PrincipalId\":\"{% $states.input.identity.userId %}\",\"TargetType\":\"AWS_ACCOUNT\",\"TargetId\":\"{% $account.accountId %}\"},\"Output\":\"{% $states.input %}\",\"Credentials\":{\"RoleArn\":\"arn:aws:iam::886436967273:role/VendingMachine\"}},\"Schedule Destroy Account\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Put Event Success\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::aws-sdk:scheduler:createSchedule\",\"Arguments\":{\"Name\":\"{% $account.accountId & \\\"-destroy\\\"  %}\",\"ScheduleExpression\":\"{% \\\"at(\\\" & $substring($expiresAt, 0, 19) & \\\")\\\" %}\",\"ScheduleExpressionTimezone\":\"UTC\",\"GroupName\":\"VendingMachine\",\"ActionAfterCompletion\":\"DELETE\",\"Target\":{\"Arn\":\"",
+                              {
+                                "Ref": "ReleaseAccountStateMachineEC3FBD41"
+                              },
+                              "\",\"Input\":\"{% $string($merge([$states.input, {\\\"init\\\": \\\"auto\\\", \\\"account\\\": $account }])) %}\",\"RoleArn\":\"",
+                              {
+                                "Fn::GetAtt": [
+                                  "AssignAccountSchedulerRoleC95074D0",
+                                  "Arn"
+                                ]
+                              },
+                              "\"},\"FlexibleTimeWindow\":{\"Mode\":\"OFF\"}},\"Output\":\"{% $states.input %}\"},\"Put Event Success\":{\"QueryLanguage\":\"JSONata\",\"Next\":\"Done\",\"Type\":\"Task\",\"Resource\":\"arn:aws:states:::events:putEvents\",\"Arguments\":{\"Entries\":[{\"Detail\":\"{% $string({\\n                  \\\"taskId\\\": $states.input.taskId,\\n                  \\\"status\\\": \\\"SUCCESS\\\",\\n                  \\\"account\\\": $account\\n              }) %}\",\"DetailType\":\"accountAssigned\",\"Source\":\"VendingMachine\",\"EventBusName\":\"",
+                              {
+                                "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+                              },
+                              "\"}]},\"Output\":\"{% $states.input %}\"},\"Done\":{\"Type\":\"Succeed\"},\"Account Already Used\":{\"Type\":\"Fail\"}}}"
+                            ]
+                          ]
+                        },
+                        "roleArn": {
+                          "Fn::GetAtt": [
+                            "AssignAccountStateMachineRole1C9D38FA",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_stepfunctions.CfnStateMachine",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_stepfunctions.StateMachine",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "MutableRoleManagementAccountRole": {
+                "id": "MutableRoleManagementAccountRole",
+                "path": "Orchestration/AssignAccount/MutableRoleManagementAccountRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "ManagementAccountRole": {
+                "id": "ManagementAccountRole",
+                "path": "Orchestration/AssignAccount/ManagementAccountRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "SchedulerPolicy": {
+                "id": "SchedulerPolicy",
+                "path": "Orchestration/AssignAccount/SchedulerPolicy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Orchestration/AssignAccount/SchedulerPolicy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                      "aws:cdk:cloudformation:props": {
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "scheduler:CreateSchedule",
+                              "Effect": "Allow",
+                              "Resource": "arn:aws:scheduler:us-east-1:481665124648:schedule/VendingMachine/*"
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "policyName": "AssignAccountSchedulerPolicyF967E9D0",
+                        "roles": [
+                          {
+                            "Ref": "AssignAccountStateMachineRole1C9D38FA"
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Policy",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "Orchestration/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "Orchestration/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "Orchestration/Exports",
+            "children": {
+              "Output{\"Ref\":\"AssignAccountStateMachineB5CF396F\"}": {
+                "id": "Output{\"Ref\":\"AssignAccountStateMachineB5CF396F\"}",
+                "path": "Orchestration/Exports/Output{\"Ref\":\"AssignAccountStateMachineB5CF396F\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              },
+              "Output{\"Ref\":\"ReleaseAccountStateMachineEC3FBD41\"}": {
+                "id": "Output{\"Ref\":\"ReleaseAccountStateMachineEC3FBD41\"}",
+                "path": "Orchestration/Exports/Output{\"Ref\":\"ReleaseAccountStateMachineEC3FBD41\"}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "Orchestration/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.179.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "Orchestration/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.179.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.179.0"
+        }
+      },
+      "Api": {
+        "id": "Api",
+        "path": "Api",
+        "children": {
+          "AppSync": {
+            "id": "AppSync",
+            "path": "Api/AppSync",
+            "children": {
+              "ApiLogsRole": {
+                "id": "ApiLogsRole",
+                "path": "Api/AppSync/ApiLogsRole",
+                "children": {
+                  "ImportApiLogsRole": {
+                    "id": "ImportApiLogsRole",
+                    "path": "Api/AppSync/ApiLogsRole/ImportApiLogsRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Api/AppSync/ApiLogsRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "appsync.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/AppSync/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::GraphQLApi",
+                  "aws:cdk:cloudformation:props": {
+                    "additionalAuthenticationProviders": [
+                      {
+                        "authenticationType": "AWS_IAM"
+                      }
+                    ],
+                    "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+                    "environmentVariables": {
+                      "ASSIGN_ACCOUNT_STATE_MACHINE_ARN": {
+                        "Fn::ImportValue": "Orchestration:ExportsOutputRefAssignAccountStateMachineB5CF396F3B5FAE1F"
+                      },
+                      "RELEASE_ACCOUNT_STATE_MACHINE_ARN": {
+                        "Fn::ImportValue": "Orchestration:ExportsOutputRefReleaseAccountStateMachineEC3FBD41B01FE890"
+                      }
+                    },
+                    "logConfig": {
+                      "cloudWatchLogsRoleArn": {
+                        "Fn::GetAtt": [
+                          "AppSyncApiLogsRole400C1C3B",
+                          "Arn"
+                        ]
+                      },
+                      "fieldLogLevel": "ALL"
+                    },
+                    "name": "VendingMachine",
+                    "userPoolConfig": {
+                      "userPoolId": {
+                        "Fn::ImportValue": "Identity:ExportsOutputRefAccountVendingMachineE572612F9FC62FEE"
+                      },
+                      "awsRegion": "us-east-1",
+                      "defaultAction": "ALLOW"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnGraphQLApi",
+                  "version": "2.179.0"
+                }
+              },
+              "Schema": {
+                "id": "Schema",
+                "path": "Api/AppSync/Schema",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::GraphQLSchema",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "definition": "type Query {\n  listMyAccounts: ListMyAccountsResult!\n}\n\ntype Mutation {\n  requestAccount(input: RequestAccountInput!): AccountRequestResult!\n  destroyAccount(input: DestroyAccountInput!): Boolean!\n  notifyAccountAssigned(\n    input: NotifyAccountAssignedInput!\n  ): AccountAssignedResult! @aws_iam\n}\n\ntype Subscription {\n  onAccountAssigned(taskId: String!): AccountAssignedResult\n    @aws_subscribe(mutations: [\"notifyAccountAssigned\"])\n}\n\ntype CredentialsResult {\n  credentials: Credential!\n  signInUrl: String!\n}\n\ntype Credential {\n  accessKeyId: String!\n  secretAccessKey: String!\n  sessionToken: String!\n  expiration: AWSDateTime!\n}\n\ninput RequestAccountInput {\n  name: String!\n  expiration: Int!\n}\n\ntype AccountRequestResult {\n  taskId: String!\n}\n\ninput NotifyAccountAssignedInput @aws_iam {\n  taskId: String!\n  status: AccountAssignedStatus!\n  message: String\n  details: AccountAssignedDetailsInput\n}\n\ninput AccountAssignedDetailsInput @aws_iam {\n  accountId: String!\n  name: String!\n  expiresAt: AWSDateTime!\n}\n\nenum AccountAssignedStatus {\n  SUCCESS\n  FAILED\n}\n\ntype AccountAssignedResult @aws_iam @aws_cognito_user_pools {\n  taskId: String!\n  status: AccountAssignedStatus!\n  message: String\n  details: AccountAssignedDetails\n}\n\ntype AccountAssignedDetails @aws_iam @aws_cognito_user_pools {\n  accountId: String!\n  name: String!\n  expiresAt: AWSDateTime!\n}\n\ntype ListMyAccountsResult {\n  items: [Account!]!\n}\n\nenum AccountStatus {\n  FREE\n  USED\n}\n\ntype Account {\n  accountId: String!\n  name: String!\n  status: AccountStatus!\n  assignedAt: AWSDateTime!\n  expiresAt: AWSDateTime!\n}\n\ninput DestroyAccountInput {\n  accountId: String!\n}\n"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnGraphQLSchema",
+                  "version": "2.179.0"
+                }
+              },
+              "LogRetention": {
+                "id": "LogRetention",
+                "path": "Api/AppSync/LogRetention",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Api/AppSync/LogRetention/Resource",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_logs.LogRetention",
+                  "version": "2.179.0"
+                }
+              },
+              "LogGroup": {
+                "id": "LogGroup",
+                "path": "Api/AppSync/LogGroup",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "EventsRole": {
+                "id": "EventsRole",
+                "path": "Api/AppSync/EventsRole",
+                "children": {
+                  "ImportEventsRole": {
+                    "id": "ImportEventsRole",
+                    "path": "Api/AppSync/EventsRole/ImportEventsRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Api/AppSync/EventsRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "events.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "Api/AppSync/EventsRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Api/AppSync/EventsRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "appsync:GraphQL",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:aws:appsync:us-east-1:481665124648:apis/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "AppSync2828A3DF",
+                                            "ApiId"
+                                          ]
+                                        },
+                                        "/types/Mutation/*"
+                                      ]
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "AppSyncEventsRoleDefaultPolicy528C513A",
+                            "roles": [
+                              {
+                                "Ref": "AppSyncEventsRole15150078"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.GraphqlApi",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a": {
+            "id": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+            "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a",
+            "children": {
+              "Code": {
+                "id": "Code",
+                "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.179.0"
+                }
+              },
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "logs:DeleteRetentionPolicy",
+                                    "logs:PutRetentionPolicy"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": "*"
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+                            "roles": [
+                              {
+                                "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "NoneDataSource": {
+            "id": "NoneDataSource",
+            "path": "Api/NoneDataSource",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/NoneDataSource/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::DataSource",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "name": "NoneDataSource",
+                    "type": "NONE"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnDataSource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.NoneDataSource",
+              "version": "2.179.0"
+            }
+          },
+          "StepFunctionsDataSource": {
+            "id": "StepFunctionsDataSource",
+            "path": "Api/StepFunctionsDataSource",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "Api/StepFunctionsDataSource/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "Api/StepFunctionsDataSource/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Api/StepFunctionsDataSource/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "appsync.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "Api/StepFunctionsDataSource/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Api/StepFunctionsDataSource/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "states:StartExecution",
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::ImportValue": "Orchestration:ExportsOutputRefAssignAccountStateMachineB5CF396F3B5FAE1F"
+                                    },
+                                    {
+                                      "Fn::ImportValue": "Orchestration:ExportsOutputRefReleaseAccountStateMachineEC3FBD41B01FE890"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "StepFunctionsDataSourceServiceRoleDefaultPolicyF3791CB7",
+                            "roles": [
+                              {
+                                "Ref": "StepFunctionsDataSourceServiceRoleE7911034"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/StepFunctionsDataSource/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::DataSource",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "httpConfig": {
+                      "endpoint": "https://states.us-east-1.amazonaws.com",
+                      "authorizationConfig": {
+                        "authorizationType": "AWS_IAM",
+                        "awsIamConfig": {
+                          "signingRegion": "us-east-1",
+                          "signingServiceName": "states"
+                        }
+                      }
+                    },
+                    "name": "StepFunctionsDataSource",
+                    "serviceRoleArn": {
+                      "Fn::GetAtt": [
+                        "StepFunctionsDataSourceServiceRoleE7911034",
+                        "Arn"
+                      ]
+                    },
+                    "type": "HTTP"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnDataSource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.HttpDataSource",
+              "version": "2.179.0"
+            }
+          },
+          "AccountsDataSource": {
+            "id": "AccountsDataSource",
+            "path": "Api/AccountsDataSource",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "Api/AccountsDataSource/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "Api/AccountsDataSource/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "Api/AccountsDataSource/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "appsync.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "Api/AccountsDataSource/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "Api/AccountsDataSource/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "dynamodb:BatchGetItem",
+                                    "dynamodb:BatchWriteItem",
+                                    "dynamodb:ConditionCheckItem",
+                                    "dynamodb:DeleteItem",
+                                    "dynamodb:DescribeTable",
+                                    "dynamodb:GetItem",
+                                    "dynamodb:GetRecords",
+                                    "dynamodb:GetShardIterator",
+                                    "dynamodb:PutItem",
+                                    "dynamodb:Query",
+                                    "dynamodb:Scan",
+                                    "dynamodb:UpdateItem"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+                                          },
+                                          "/index/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "AccountsDataSourceServiceRoleDefaultPolicyAA4BBD33",
+                            "roles": [
+                              {
+                                "Ref": "AccountsDataSourceServiceRoleC4D2F910"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/AccountsDataSource/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::DataSource",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "dynamoDbConfig": {
+                      "tableName": {
+                        "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+                      },
+                      "awsRegion": "us-east-1"
+                    },
+                    "name": "AccountsDataSource",
+                    "serviceRoleArn": {
+                      "Fn::GetAtt": [
+                        "AccountsDataSourceServiceRoleC4D2F910",
+                        "Arn"
+                      ]
+                    },
+                    "type": "AMAZON_DYNAMODB"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnDataSource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.DynamoDbDataSource",
+              "version": "2.179.0"
+            }
+          },
+          "RequestAccount": {
+            "id": "RequestAccount",
+            "path": "Api/RequestAccount",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/RequestAccount/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::FunctionConfiguration",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "code": "// stack/lib/api-stack/graphql/resolvers/request-account.ts\nimport { util } from \"@aws-appsync/utils\";\nvar request = (ctx) => {\n  const taskId = util.autoId();\n  ctx.stash.taskId = taskId;\n  const { name, expiration } = ctx.args.input;\n  if (expiration < 1 || expiration > 30) {\n    util.error(\"Expiration must be between 1 and 30 days\", \"ValidationError\");\n  }\n  const identity = ctx.identity.claims;\n  return {\n    method: \"POST\",\n    resourcePath: \"/\",\n    params: {\n      headers: {\n        \"x-amz-target\": \"AWSStepFunctions.StartExecution\",\n        \"content-type\": \"application/x-amz-json-1.0\"\n      },\n      body: JSON.stringify({\n        name: taskId,\n        stateMachineArn: ctx.env.ASSIGN_ACCOUNT_STATE_MACHINE_ARN,\n        input: JSON.stringify({\n          taskId,\n          name,\n          expiration,\n          identity: {\n            userId: identity[\"custom:userId\"],\n            username: identity[\"custom:username\"],\n            email: identity.email\n          }\n        })\n      })\n    }\n  };\n};\nvar response = (ctx) => {\n  return {\n    taskId: ctx.stash.taskId\n  };\n};\nexport {\n  request,\n  response\n};\n//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsic3RhY2svbGliL2FwaS1zdGFjay9ncmFwaHFsL3Jlc29sdmVycy9yZXF1ZXN0LWFjY291bnQudHMiXSwKICAibWFwcGluZ3MiOiAiO0FBQUEsU0FBMEMsWUFBWTtBQUUvQyxJQUFNLFVBQVUsQ0FBQyxRQUFpQjtBQUN2QyxRQUFNLFNBQVMsS0FBSyxPQUFPO0FBQzNCLE1BQUksTUFBTSxTQUFTO0FBRW5CLFFBQU0sRUFBRSxNQUFNLFdBQVcsSUFBSSxJQUFJLEtBQUs7QUFFdEMsTUFBSSxhQUFhLEtBQUssYUFBYSxJQUFJO0FBQ3JDLFNBQUssTUFBTSw0Q0FBNEMsaUJBQWlCO0FBQUEsRUFDMUU7QUFFQSxRQUFNLFdBQVksSUFBSSxTQUFvQztBQUUxRCxTQUFPO0FBQUEsSUFDTCxRQUFRO0FBQUEsSUFDUixjQUFjO0FBQUEsSUFDZCxRQUFRO0FBQUEsTUFDTixTQUFTO0FBQUEsUUFDUCxnQkFBZ0I7QUFBQSxRQUNoQixnQkFBZ0I7QUFBQSxNQUNsQjtBQUFBLE1BQ0EsTUFBTSxLQUFLLFVBQVU7QUFBQSxRQUNuQixNQUFNO0FBQUEsUUFDTixpQkFBaUIsSUFBSSxJQUFJO0FBQUEsUUFDekIsT0FBTyxLQUFLLFVBQVU7QUFBQSxVQUNwQjtBQUFBLFVBQ0E7QUFBQSxVQUNBO0FBQUEsVUFDQSxVQUFVO0FBQUEsWUFDUixRQUFRLFNBQVMsZUFBZTtBQUFBLFlBQ2hDLFVBQVUsU0FBUyxpQkFBaUI7QUFBQSxZQUNwQyxPQUFPLFNBQVM7QUFBQSxVQUNsQjtBQUFBLFFBQ0YsQ0FBQztBQUFBLE1BQ0gsQ0FBQztBQUFBLElBQ0g7QUFBQSxFQUNGO0FBQ0Y7QUFFTyxJQUFNLFdBQVcsQ0FBQyxRQUFpQjtBQUN4QyxTQUFPO0FBQUEsSUFDTCxRQUFRLElBQUksTUFBTTtBQUFBLEVBQ3BCO0FBQ0Y7IiwKICAibmFtZXMiOiBbXQp9Cg==\n",
+                    "dataSourceName": "StepFunctionsDataSource",
+                    "functionVersion": "2018-05-29",
+                    "name": "RequestAccount",
+                    "runtime": {
+                      "name": "APPSYNC_JS",
+                      "runtimeVersion": "1.0.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnFunctionConfiguration",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.AppsyncFunction",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "RequestAccountPipeline": {
+            "id": "RequestAccountPipeline",
+            "path": "Api/RequestAccountPipeline",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/RequestAccountPipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::Resolver",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "code": "\n        export const request = () => {\n          return {};\n        }\n\n        export const response = (ctx) => {\n          return ctx.prev.result;\n        }\n      ",
+                    "fieldName": "requestAccount",
+                    "kind": "PIPELINE",
+                    "pipelineConfig": {
+                      "functions": [
+                        {
+                          "Fn::GetAtt": [
+                            "RequestAccount6B016031",
+                            "FunctionId"
+                          ]
+                        }
+                      ]
+                    },
+                    "runtime": {
+                      "name": "APPSYNC_JS",
+                      "runtimeVersion": "1.0.0"
+                    },
+                    "typeName": "Mutation"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnResolver",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.Resolver",
+              "version": "2.179.0"
+            }
+          },
+          "DestroyAccount": {
+            "id": "DestroyAccount",
+            "path": "Api/DestroyAccount",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/DestroyAccount/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::FunctionConfiguration",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "code": "// stack/lib/api-stack/graphql/resolvers/destroy-account.ts\nimport { util } from \"@aws-appsync/utils\";\nvar request = (ctx) => {\n  const identity = ctx.identity.claims;\n  return {\n    method: \"POST\",\n    resourcePath: \"/\",\n    params: {\n      headers: {\n        \"x-amz-target\": \"AWSStepFunctions.StartExecution\",\n        \"content-type\": \"application/x-amz-json-1.0\"\n      },\n      body: JSON.stringify({\n        name: util.autoId(),\n        stateMachineArn: ctx.env.RELEASE_ACCOUNT_STATE_MACHINE_ARN,\n        input: JSON.stringify({\n          init: \"user\",\n          identity: {\n            userId: identity[\"custom:userId\"],\n            username: identity[\"custom:username\"],\n            email: identity.email\n          },\n          account: {\n            accountId: ctx.args.input.accountId\n          }\n        })\n      })\n    }\n  };\n};\nvar response = (ctx) => {\n  return true;\n};\nexport {\n  request,\n  response\n};\n//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsic3RhY2svbGliL2FwaS1zdGFjay9ncmFwaHFsL3Jlc29sdmVycy9kZXN0cm95LWFjY291bnQudHMiXSwKICAibWFwcGluZ3MiOiAiO0FBQUEsU0FBa0IsWUFBWTtBQUV2QixJQUFNLFVBQVUsQ0FBQyxRQUFpQjtBQUN2QyxRQUFNLFdBQVksSUFBSSxTQUFvQztBQUUxRCxTQUFPO0FBQUEsSUFDTCxRQUFRO0FBQUEsSUFDUixjQUFjO0FBQUEsSUFDZCxRQUFRO0FBQUEsTUFDTixTQUFTO0FBQUEsUUFDUCxnQkFBZ0I7QUFBQSxRQUNoQixnQkFBZ0I7QUFBQSxNQUNsQjtBQUFBLE1BQ0EsTUFBTSxLQUFLLFVBQVU7QUFBQSxRQUNuQixNQUFNLEtBQUssT0FBTztBQUFBLFFBQ2xCLGlCQUFpQixJQUFJLElBQUk7QUFBQSxRQUN6QixPQUFPLEtBQUssVUFBVTtBQUFBLFVBQ3BCLE1BQU07QUFBQSxVQUNOLFVBQVU7QUFBQSxZQUNSLFFBQVEsU0FBUyxlQUFlO0FBQUEsWUFDaEMsVUFBVSxTQUFTLGlCQUFpQjtBQUFBLFlBQ3BDLE9BQU8sU0FBUztBQUFBLFVBQ2xCO0FBQUEsVUFDQSxTQUFTO0FBQUEsWUFDUCxXQUFXLElBQUksS0FBSyxNQUFNO0FBQUEsVUFDNUI7QUFBQSxRQUNGLENBQUM7QUFBQSxNQUNILENBQUM7QUFBQSxJQUNIO0FBQUEsRUFDRjtBQUNGO0FBRU8sSUFBTSxXQUFXLENBQUMsUUFBaUI7QUFDeEMsU0FBTztBQUNUOyIsCiAgIm5hbWVzIjogW10KfQo=\n",
+                    "dataSourceName": "StepFunctionsDataSource",
+                    "functionVersion": "2018-05-29",
+                    "name": "DestroyAccount",
+                    "runtime": {
+                      "name": "APPSYNC_JS",
+                      "runtimeVersion": "1.0.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnFunctionConfiguration",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.AppsyncFunction",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "DestroyAccountPipeline": {
+            "id": "DestroyAccountPipeline",
+            "path": "Api/DestroyAccountPipeline",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/DestroyAccountPipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::Resolver",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "code": "\n        export const request = () => {\n          return {};\n        }\n\n        export const response = (ctx) => {\n          return ctx.prev.result;\n        }\n      ",
+                    "fieldName": "destroyAccount",
+                    "kind": "PIPELINE",
+                    "pipelineConfig": {
+                      "functions": [
+                        {
+                          "Fn::GetAtt": [
+                            "DestroyAccount4CA80B96",
+                            "FunctionId"
+                          ]
+                        }
+                      ]
+                    },
+                    "runtime": {
+                      "name": "APPSYNC_JS",
+                      "runtimeVersion": "1.0.0"
+                    },
+                    "typeName": "Mutation"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnResolver",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.Resolver",
+              "version": "2.179.0"
+            }
+          },
+          "NotifyAccountAssigned": {
+            "id": "NotifyAccountAssigned",
+            "path": "Api/NotifyAccountAssigned",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/NotifyAccountAssigned/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::Resolver",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "code": "\n          export const request = () => {\n            return {};\n          }\n  \n          export const response = (ctx) => {\n            return ctx.args.input;\n          }\n        ",
+                    "dataSourceName": "NoneDataSource",
+                    "fieldName": "notifyAccountAssigned",
+                    "kind": "UNIT",
+                    "runtime": {
+                      "name": "APPSYNC_JS",
+                      "runtimeVersion": "1.0.0"
+                    },
+                    "typeName": "Mutation"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnResolver",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.Resolver",
+              "version": "2.179.0"
+            }
+          },
+          "ListAccounts": {
+            "id": "ListAccounts",
+            "path": "Api/ListAccounts",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/ListAccounts/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::FunctionConfiguration",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "code": "// stack/lib/api-stack/graphql/resolvers/list-my-accounts.ts\nimport { query } from \"@aws-appsync/utils/dynamodb\";\nvar request = (ctx) => {\n  const taskId = util.autoId();\n  ctx.stash.taskId = taskId;\n  const identity = ctx.identity.claims;\n  return query({\n    index: \"userIndex\",\n    query: {\n      assignedTo: { eq: identity[\"custom:userId\"] }\n    }\n  });\n};\nvar response = (ctx) => {\n  return ctx.result;\n};\nexport {\n  request,\n  response\n};\n//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsic3RhY2svbGliL2FwaS1zdGFjay9ncmFwaHFsL3Jlc29sdmVycy9saXN0LW15LWFjY291bnRzLnRzIl0sCiAgIm1hcHBpbmdzIjogIjtBQUtBLFNBQVMsYUFBYTtBQUVmLElBQU0sVUFBVSxDQUFDLFFBQXVDO0FBQzdELFFBQU0sU0FBUyxLQUFLLE9BQU87QUFDM0IsTUFBSSxNQUFNLFNBQVM7QUFFbkIsUUFBTSxXQUFZLElBQUksU0FBb0M7QUFFMUQsU0FBTyxNQUE4QjtBQUFBLElBQ25DLE9BQU87QUFBQSxJQUNQLE9BQU87QUFBQSxNQUNMLFlBQVksRUFBRSxJQUFJLFNBQVMsZUFBZSxFQUFFO0FBQUEsSUFDOUM7QUFBQSxFQUNGLENBQUM7QUFDSDtBQUVPLElBQU0sV0FBVyxDQUFDLFFBQWlCO0FBQ3hDLFNBQU8sSUFBSTtBQUNiOyIsCiAgIm5hbWVzIjogW10KfQo=\n",
+                    "dataSourceName": "AccountsDataSource",
+                    "functionVersion": "2018-05-29",
+                    "name": "ListAccounts",
+                    "runtime": {
+                      "name": "APPSYNC_JS",
+                      "runtimeVersion": "1.0.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnFunctionConfiguration",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.AppsyncFunction",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "ListMyAccountsPipeline": {
+            "id": "ListMyAccountsPipeline",
+            "path": "Api/ListMyAccountsPipeline",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/ListMyAccountsPipeline/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::AppSync::Resolver",
+                  "aws:cdk:cloudformation:props": {
+                    "apiId": {
+                      "Fn::GetAtt": [
+                        "AppSync2828A3DF",
+                        "ApiId"
+                      ]
+                    },
+                    "code": "\n        export const request = () => {\n          return {};\n        }\n\n        export const response = (ctx) => {\n          return ctx.prev.result;\n        }\n      ",
+                    "fieldName": "listMyAccounts",
+                    "kind": "PIPELINE",
+                    "pipelineConfig": {
+                      "functions": [
+                        {
+                          "Fn::GetAtt": [
+                            "ListAccountsEAECB93D",
+                            "FunctionId"
+                          ]
+                        }
+                      ]
+                    },
+                    "runtime": {
+                      "name": "APPSYNC_JS",
+                      "runtimeVersion": "1.0.0"
+                    },
+                    "typeName": "Query"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_appsync.CfnResolver",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_appsync.Resolver",
+              "version": "2.179.0"
+            }
+          },
+          "RequestAccountRule": {
+            "id": "RequestAccountRule",
+            "path": "Api/RequestAccountRule",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/RequestAccountRule/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
+                  "aws:cdk:cloudformation:props": {
+                    "eventBusName": {
+                      "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+                    },
+                    "eventPattern": {
+                      "source": [
+                        "VendingMachine"
+                      ],
+                      "detail-type": [
+                        "accountAssigned"
+                      ]
+                    },
+                    "state": "ENABLED",
+                    "targets": [
+                      {
+                        "id": "Target0",
+                        "arn": {
+                          "Fn::GetAtt": [
+                            "AppSync2828A3DF",
+                            "GraphQLEndpointArn"
+                          ]
+                        },
+                        "roleArn": {
+                          "Fn::GetAtt": [
+                            "AppSyncEventsRole15150078",
+                            "Arn"
+                          ]
+                        },
+                        "appSyncParameters": {
+                          "graphQlOperation": "mutation Notify($input: NotifyAccountAssignedInput!){ notifyAccountAssigned(input: $input) { taskId, status, details { accountId, name, expiresAt } } }"
+                        },
+                        "inputTransformer": {
+                          "inputTemplate": "{\"input\":{\"taskId\":<detail-taskId>,\"status\":<detail-status>,\"details\":{\"accountId\":<detail-account-accountId>,\"name\":<detail-account-name>,\"expiresAt\":<detail-account-expiresAt>}}}",
+                          "inputPathsMap": {
+                            "detail-taskId": "$.detail.taskId",
+                            "detail-status": "$.detail.status",
+                            "detail-account-accountId": "$.detail.account.accountId",
+                            "detail-account-name": "$.detail.account.name",
+                            "detail-account-expiresAt": "$.detail.account.expiresAt"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_events.CfnRule",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_events.Rule",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "AssignationFailedRule": {
+            "id": "AssignationFailedRule",
+            "path": "Api/AssignationFailedRule",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "Api/AssignationFailedRule/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Events::Rule",
+                  "aws:cdk:cloudformation:props": {
+                    "eventBusName": {
+                      "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+                    },
+                    "eventPattern": {
+                      "source": [
+                        "VendingMachine"
+                      ],
+                      "detail-type": [
+                        "accountAssignationFailed"
+                      ]
+                    },
+                    "state": "ENABLED",
+                    "targets": [
+                      {
+                        "id": "Target0",
+                        "arn": {
+                          "Fn::GetAtt": [
+                            "AppSync2828A3DF",
+                            "GraphQLEndpointArn"
+                          ]
+                        },
+                        "roleArn": {
+                          "Fn::GetAtt": [
+                            "AppSyncEventsRole15150078",
+                            "Arn"
+                          ]
+                        },
+                        "appSyncParameters": {
+                          "graphQlOperation": "mutation Notify($input: NotifyAccountAssignedInput!){ notifyAccountAssigned(input: $input) { taskId, status, message } }"
+                        },
+                        "inputTransformer": {
+                          "inputTemplate": "{\"input\":{\"taskId\":<detail-taskId>,\"status\":<detail-status>,\"message\":<detail-message>}}",
+                          "inputPathsMap": {
+                            "detail-taskId": "$.detail.taskId",
+                            "detail-status": "$.detail.status",
+                            "detail-message": "$.detail.message"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_events.CfnRule",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_events.Rule",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "Api/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "Api/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "Exports": {
+            "id": "Exports",
+            "path": "Api/Exports",
+            "children": {
+              "Output{\"Fn::GetAtt\":[\"AppSync2828A3DF\",\"GraphQLUrl\"]}": {
+                "id": "Output{\"Fn::GetAtt\":[\"AppSync2828A3DF\",\"GraphQLUrl\"]}",
+                "path": "Api/Exports/Output{\"Fn::GetAtt\":[\"AppSync2828A3DF\",\"GraphQLUrl\"]}",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "Api/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.179.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "Api/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.179.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.179.0"
+        }
+      },
+      "FrontEnd": {
+        "id": "FrontEnd",
+        "path": "FrontEnd",
+        "children": {
+          "BundleApp": {
+            "id": "BundleApp",
+            "path": "FrontEnd/BundleApp",
+            "children": {
+              "Stage": {
+                "id": "Stage",
+                "path": "FrontEnd/BundleApp/Stage",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.179.0"
+                }
+              },
+              "AssetBucket": {
+                "id": "AssetBucket",
+                "path": "FrontEnd/BundleApp/AssetBucket",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+              "version": "2.179.0"
+            }
+          },
+          "UserPoolId": {
+            "id": "UserPoolId",
+            "path": "FrontEnd/UserPoolId",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontEnd/UserPoolId/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "/vending-machine/userPoolId",
+                    "type": "String",
+                    "value": {
+                      "Fn::ImportValue": "Identity:ExportsOutputRefAccountVendingMachineE572612F9FC62FEE"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "UserPoolClientId": {
+            "id": "UserPoolClientId",
+            "path": "FrontEnd/UserPoolClientId",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontEnd/UserPoolClientId/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "/vending-machine/userPoolClientId",
+                    "type": "String",
+                    "value": {
+                      "Fn::ImportValue": "Identity:ExportsOutputRefAccountVendingMachineClient4DE2FBADF3854CB8"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "GraphQLUrl": {
+            "id": "GraphQLUrl",
+            "path": "FrontEnd/GraphQLUrl",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontEnd/GraphQLUrl/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::SSM::Parameter",
+                  "aws:cdk:cloudformation:props": {
+                    "name": "/vending-machine/graphQLUrl",
+                    "type": "String",
+                    "value": {
+                      "Fn::ImportValue": "Api:ExportsOutputFnGetAttAppSync2828A3DFGraphQLUrl888A858F"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ssm.CfnParameter",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_ssm.StringParameter",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "FrontendBucket": {
+            "id": "FrontendBucket",
+            "path": "FrontEnd/FrontendBucket",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontEnd/FrontendBucket/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "accessControl": "Private",
+                    "tags": [
+                      {
+                        "key": "aws-cdk:cr-owned:67476149",
+                        "value": "true"
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.179.0"
+                }
+              },
+              "Policy": {
+                "id": "Policy",
+                "path": "FrontEnd/FrontendBucket/Policy",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "FrontEnd/FrontendBucket/Policy/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                      "aws:cdk:cloudformation:props": {
+                        "bucket": {
+                          "Ref": "FrontendBucketEFE2E19C"
+                        },
+                        "policyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "s3:GetObject",
+                              "Condition": {
+                                "StringEquals": {
+                                  "AWS:SourceArn": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":cloudfront::",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":distribution/",
+                                        {
+                                          "Ref": "Distribution830FAC52"
+                                        }
+                                      ]
+                                    ]
+                                  }
+                                }
+                              },
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "cloudfront.amazonaws.com"
+                              },
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "FrontendBucketEFE2E19C",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "/*"
+                                  ]
+                                ]
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "Distribution": {
+            "id": "Distribution",
+            "path": "FrontEnd/Distribution",
+            "children": {
+              "Origin1": {
+                "id": "Origin1",
+                "path": "FrontEnd/Distribution/Origin1",
+                "children": {
+                  "S3OriginAccessControl": {
+                    "id": "S3OriginAccessControl",
+                    "path": "FrontEnd/Distribution/Origin1/S3OriginAccessControl",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "FrontEnd/Distribution/Origin1/S3OriginAccessControl/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::CloudFront::OriginAccessControl",
+                          "aws:cdk:cloudformation:props": {
+                            "originAccessControlConfig": {
+                              "name": "FrontEndDistributionOrigin1S3OriginAccessControlDE02B070",
+                              "signingBehavior": "always",
+                              "signingProtocol": "sigv4",
+                              "originAccessControlOriginType": "s3"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnOriginAccessControl",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_cloudfront.S3OriginAccessControl",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.4.2"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontEnd/Distribution/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                  "aws:cdk:cloudformation:props": {
+                    "distributionConfig": {
+                      "enabled": true,
+                      "origins": [
+                        {
+                          "domainName": {
+                            "Fn::GetAtt": [
+                              "FrontendBucketEFE2E19C",
+                              "RegionalDomainName"
+                            ]
+                          },
+                          "id": "FrontEndDistributionOrigin1F8E5B6ED",
+                          "s3OriginConfig": {
+                            "originAccessIdentity": ""
+                          },
+                          "originAccessControlId": {
+                            "Fn::GetAtt": [
+                              "DistributionOrigin1S3OriginAccessControlEB606076",
+                              "Id"
+                            ]
+                          }
+                        }
+                      ],
+                      "defaultCacheBehavior": {
+                        "pathPattern": "*",
+                        "targetOriginId": "FrontEndDistributionOrigin1F8E5B6ED",
+                        "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                        "compress": true,
+                        "viewerProtocolPolicy": "allow-all"
+                      },
+                      "defaultRootObject": "index.html",
+                      "httpVersion": "http2",
+                      "ipv6Enabled": true
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "DeployFiles": {
+            "id": "DeployFiles",
+            "path": "FrontEnd/DeployFiles",
+            "children": {
+              "AwsCliLayer": {
+                "id": "AwsCliLayer",
+                "path": "FrontEnd/DeployFiles/AwsCliLayer",
+                "children": {
+                  "Code": {
+                    "id": "Code",
+                    "path": "FrontEnd/DeployFiles/AwsCliLayer/Code",
+                    "children": {
+                      "Stage": {
+                        "id": "Stage",
+                        "path": "FrontEnd/DeployFiles/AwsCliLayer/Code/Stage",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.AssetStaging",
+                          "version": "2.179.0"
+                        }
+                      },
+                      "AssetBucket": {
+                        "id": "AssetBucket",
+                        "path": "FrontEnd/DeployFiles/AwsCliLayer/Code/AssetBucket",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                          "version": "2.179.0",
+                          "metadata": []
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "FrontEnd/DeployFiles/AwsCliLayer/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::LayerVersion",
+                      "aws:cdk:cloudformation:props": {
+                        "content": {
+                          "s3Bucket": "cdk-hnb659fds-assets-481665124648-us-east-1",
+                          "s3Key": "3ec63c94c6b53a6997f63c3f6e780c0c4da7e541c316938fc6681d96f76b30d6.zip"
+                        },
+                        "description": "/opt/awscli/aws"
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.CfnLayerVersion",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.lambda_layer_awscli.AwsCliLayer",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "CustomResourceHandler": {
+                "id": "CustomResourceHandler",
+                "path": "FrontEnd/DeployFiles/CustomResourceHandler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.SingletonFunction",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Asset1": {
+                "id": "Asset1",
+                "path": "FrontEnd/DeployFiles/Asset1",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "FrontEnd/DeployFiles/Asset1/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "FrontEnd/DeployFiles/Asset1/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.179.0"
+                }
+              },
+              "CustomResource": {
+                "id": "CustomResource",
+                "path": "FrontEnd/DeployFiles/CustomResource",
+                "children": {
+                  "Default": {
+                    "id": "Default",
+                    "path": "FrontEnd/DeployFiles/CustomResource/Default",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnResource",
+                      "version": "2.179.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CustomResource",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3_deployment.BucketDeployment",
+              "version": "2.179.0"
+            }
+          },
+          "Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": {
+            "id": "Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C",
+            "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": [
+                                    "s3:GetBucket*",
+                                    "s3:GetObject*",
+                                    "s3:List*"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    "arn:aws:s3:::cdk-hnb659fds-assets-481665124648-us-east-1",
+                                    "arn:aws:s3:::cdk-hnb659fds-assets-481665124648-us-east-1/*"
+                                  ]
+                                },
+                                {
+                                  "Action": [
+                                    "s3:Abort*",
+                                    "s3:DeleteObject*",
+                                    "s3:GetBucket*",
+                                    "s3:GetObject*",
+                                    "s3:List*",
+                                    "s3:PutObject",
+                                    "s3:PutObjectLegalHold",
+                                    "s3:PutObjectRetention",
+                                    "s3:PutObjectTagging",
+                                    "s3:PutObjectVersionTagging"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "FrontendBucketEFE2E19C",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::Join": [
+                                        "",
+                                        [
+                                          {
+                                            "Fn::GetAtt": [
+                                              "FrontendBucketEFE2E19C",
+                                              "Arn"
+                                            ]
+                                          },
+                                          "/*"
+                                        ]
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF",
+                            "roles": [
+                              {
+                                "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.179.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.179.0",
+                  "metadata": []
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.179.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.179.0",
+                      "metadata": []
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.179.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "FrontEnd/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-481665124648-us-east-1",
+                      "s3Key": "c6358465bf49dfae556bb430bf9c81fa578c221b82c308e3707901b1dd654762.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
+                      }
+                    },
+                    "handler": "index.handler",
+                    "layers": [
+                      {
+                        "Ref": "DeployFilesAwsCliLayerF562E16D"
+                      }
+                    ],
+                    "role": {
+                      "Fn::GetAtt": [
+                        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.11",
+                    "timeout": 900
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.179.0",
+              "metadata": []
+            }
+          },
+          "DistributionDomain": {
+            "id": "DistributionDomain",
+            "path": "FrontEnd/DistributionDomain",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.179.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "FrontEnd/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "FrontEnd/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.179.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.4.2"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "FrontEnd/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.179.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "FrontEnd/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.179.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.179.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.4.2"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.179.0"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+ "Resources": {
+  "VendingMachine168CF2DD": {
+   "Type": "AWS::Events::EventBus",
+   "Properties": {
+    "Name": "EventBusVendingMachine308DEFEB"
+   },
+   "Metadata": {
+    "aws:cdk:path": "EventBus/VendingMachine/Resource"
+   }
+  },
+  "ScheduleGroup": {
+   "Type": "AWS::Scheduler::ScheduleGroup",
+   "Properties": {
+    "Name": "VendingMachine"
+   },
+   "Metadata": {
+    "aws:cdk:path": "EventBus/ScheduleGroup"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zXHQQ7CIBBA0bN0D6PgwrhtY9zbAxiEaaStQ8NAuyDc3Zjq6v2vQZ0vcGzMxtK6Sc7+CaVPxk7CbPwouCIlhnL92mYW3UD/roLtC12eMUI3UP+bWwx5qVVQcAgjH1atQZ1ANSN7L2Om5N8I990PtSGGv4AAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "EventBus/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputFnGetAttVendingMachine168CF2DDArn8993BE4F": {
+   "Value": {
+    "Fn::GetAtt": [
+     "VendingMachine168CF2DD",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "EventBus:ExportsOutputFnGetAttVendingMachine168CF2DDArn8993BE4F"
+   }
+  },
+  "ExportsOutputRefVendingMachine168CF2DD31F5221B": {
+   "Value": {
+    "Ref": "VendingMachine168CF2DD"
+   },
+   "Export": {
+    "Name": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

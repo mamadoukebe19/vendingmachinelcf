@@ -1,0 +1,830 @@
+{
+ "Resources": {
+  "AppSyncApiLogsRole400C1C3B": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AppSync/ApiLogsRole/Resource"
+   }
+  },
+  "AppSync2828A3DF": {
+   "Type": "AWS::AppSync::GraphQLApi",
+   "Properties": {
+    "AdditionalAuthenticationProviders": [
+     {
+      "AuthenticationType": "AWS_IAM"
+     }
+    ],
+    "AuthenticationType": "AMAZON_COGNITO_USER_POOLS",
+    "EnvironmentVariables": {
+     "ASSIGN_ACCOUNT_STATE_MACHINE_ARN": {
+      "Fn::ImportValue": "Orchestration:ExportsOutputRefAssignAccountStateMachineB5CF396F3B5FAE1F"
+     },
+     "RELEASE_ACCOUNT_STATE_MACHINE_ARN": {
+      "Fn::ImportValue": "Orchestration:ExportsOutputRefReleaseAccountStateMachineEC3FBD41B01FE890"
+     }
+    },
+    "LogConfig": {
+     "CloudWatchLogsRoleArn": {
+      "Fn::GetAtt": [
+       "AppSyncApiLogsRole400C1C3B",
+       "Arn"
+      ]
+     },
+     "FieldLogLevel": "ALL"
+    },
+    "Name": "VendingMachine",
+    "UserPoolConfig": {
+     "AwsRegion": "us-east-1",
+     "DefaultAction": "ALLOW",
+     "UserPoolId": {
+      "Fn::ImportValue": "Identity:ExportsOutputRefAccountVendingMachineE572612F9FC62FEE"
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AppSync/Resource"
+   }
+  },
+  "AppSyncSchemaA5DAC9A5": {
+   "Type": "AWS::AppSync::GraphQLSchema",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Definition": "type Query {\n  listMyAccounts: ListMyAccountsResult!\n}\n\ntype Mutation {\n  requestAccount(input: RequestAccountInput!): AccountRequestResult!\n  destroyAccount(input: DestroyAccountInput!): Boolean!\n  notifyAccountAssigned(\n    input: NotifyAccountAssignedInput!\n  ): AccountAssignedResult! @aws_iam\n}\n\ntype Subscription {\n  onAccountAssigned(taskId: String!): AccountAssignedResult\n    @aws_subscribe(mutations: [\"notifyAccountAssigned\"])\n}\n\ntype CredentialsResult {\n  credentials: Credential!\n  signInUrl: String!\n}\n\ntype Credential {\n  accessKeyId: String!\n  secretAccessKey: String!\n  sessionToken: String!\n  expiration: AWSDateTime!\n}\n\ninput RequestAccountInput {\n  name: String!\n  expiration: Int!\n}\n\ntype AccountRequestResult {\n  taskId: String!\n}\n\ninput NotifyAccountAssignedInput @aws_iam {\n  taskId: String!\n  status: AccountAssignedStatus!\n  message: String\n  details: AccountAssignedDetailsInput\n}\n\ninput AccountAssignedDetailsInput @aws_iam {\n  accountId: String!\n  name: String!\n  expiresAt: AWSDateTime!\n}\n\nenum AccountAssignedStatus {\n  SUCCESS\n  FAILED\n}\n\ntype AccountAssignedResult @aws_iam @aws_cognito_user_pools {\n  taskId: String!\n  status: AccountAssignedStatus!\n  message: String\n  details: AccountAssignedDetails\n}\n\ntype AccountAssignedDetails @aws_iam @aws_cognito_user_pools {\n  accountId: String!\n  name: String!\n  expiresAt: AWSDateTime!\n}\n\ntype ListMyAccountsResult {\n  items: [Account!]!\n}\n\nenum AccountStatus {\n  FREE\n  USED\n}\n\ntype Account {\n  accountId: String!\n  name: String!\n  status: AccountStatus!\n  assignedAt: AWSDateTime!\n  expiresAt: AWSDateTime!\n}\n\ninput DestroyAccountInput {\n  accountId: String!\n}\n"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AppSync/Schema"
+   }
+  },
+  "AppSyncLogRetentionBBD75D6F": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/appsync/apis/",
+       {
+        "Fn::GetAtt": [
+         "AppSync2828A3DF",
+         "ApiId"
+        ]
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AppSync/LogRetention/Resource"
+   }
+  },
+  "AppSyncEventsRole15150078": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "events.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AppSync/EventsRole/Resource"
+   }
+  },
+  "AppSyncEventsRoleDefaultPolicy528C513A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "appsync:GraphQL",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:appsync:us-east-1:481665124648:apis/",
+          {
+           "Fn::GetAtt": [
+            "AppSync2828A3DF",
+            "ApiId"
+           ]
+          },
+          "/types/Mutation/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncEventsRoleDefaultPolicy528C513A",
+    "Roles": [
+     {
+      "Ref": "AppSyncEventsRole15150078"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AppSync/EventsRole/DefaultPolicy/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:DeleteRetentionPolicy",
+        "logs:PutRetentionPolicy"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "Roles": [
+     {
+      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Handler": "index.handler",
+    "Runtime": "nodejs20.x",
+    "Timeout": 900,
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-481665124648-us-east-1",
+     "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+    "aws:asset:path": "asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "NoneDataSourceE15C2AD2": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Name": "NoneDataSource",
+    "Type": "NONE"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/NoneDataSource/Resource"
+   }
+  },
+  "StepFunctionsDataSourceServiceRoleE7911034": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/StepFunctionsDataSource/ServiceRole/Resource"
+   }
+  },
+  "StepFunctionsDataSourceServiceRoleDefaultPolicyF3791CB7": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "states:StartExecution",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "Orchestration:ExportsOutputRefAssignAccountStateMachineB5CF396F3B5FAE1F"
+        },
+        {
+         "Fn::ImportValue": "Orchestration:ExportsOutputRefReleaseAccountStateMachineEC3FBD41B01FE890"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "StepFunctionsDataSourceServiceRoleDefaultPolicyF3791CB7",
+    "Roles": [
+     {
+      "Ref": "StepFunctionsDataSourceServiceRoleE7911034"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/StepFunctionsDataSource/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "StepFunctionsDataSource318E9DB9": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "HttpConfig": {
+     "AuthorizationConfig": {
+      "AuthorizationType": "AWS_IAM",
+      "AwsIamConfig": {
+       "SigningRegion": "us-east-1",
+       "SigningServiceName": "states"
+      }
+     },
+     "Endpoint": "https://states.us-east-1.amazonaws.com"
+    },
+    "Name": "StepFunctionsDataSource",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "StepFunctionsDataSourceServiceRoleE7911034",
+      "Arn"
+     ]
+    },
+    "Type": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/StepFunctionsDataSource/Resource"
+   }
+  },
+  "AccountsDataSourceServiceRoleC4D2F910": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AccountsDataSource/ServiceRole/Resource"
+   }
+  },
+  "AccountsDataSourceServiceRoleDefaultPolicyAA4BBD33": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:PutItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:UpdateItem"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::ImportValue": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+           },
+           "/index/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AccountsDataSourceServiceRoleDefaultPolicyAA4BBD33",
+    "Roles": [
+     {
+      "Ref": "AccountsDataSourceServiceRoleC4D2F910"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AccountsDataSource/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AccountsDataSourceCECCB5D4": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "DynamoDBConfig": {
+     "AwsRegion": "us-east-1",
+     "TableName": {
+      "Fn::ImportValue": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+     }
+    },
+    "Name": "AccountsDataSource",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "AccountsDataSourceServiceRoleC4D2F910",
+      "Arn"
+     ]
+    },
+    "Type": "AMAZON_DYNAMODB"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AccountsDataSource/Resource"
+   }
+  },
+  "RequestAccount6B016031": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Code": "// stack/lib/api-stack/graphql/resolvers/request-account.ts\nimport { util } from \"@aws-appsync/utils\";\nvar request = (ctx) => {\n  const taskId = util.autoId();\n  ctx.stash.taskId = taskId;\n  const { name, expiration } = ctx.args.input;\n  if (expiration < 1 || expiration > 30) {\n    util.error(\"Expiration must be between 1 and 30 days\", \"ValidationError\");\n  }\n  const identity = ctx.identity.claims;\n  return {\n    method: \"POST\",\n    resourcePath: \"/\",\n    params: {\n      headers: {\n        \"x-amz-target\": \"AWSStepFunctions.StartExecution\",\n        \"content-type\": \"application/x-amz-json-1.0\"\n      },\n      body: JSON.stringify({\n        name: taskId,\n        stateMachineArn: ctx.env.ASSIGN_ACCOUNT_STATE_MACHINE_ARN,\n        input: JSON.stringify({\n          taskId,\n          name,\n          expiration,\n          identity: {\n            userId: identity[\"custom:userId\"],\n            username: identity[\"custom:username\"],\n            email: identity.email\n          }\n        })\n      })\n    }\n  };\n};\nvar response = (ctx) => {\n  return {\n    taskId: ctx.stash.taskId\n  };\n};\nexport {\n  request,\n  response\n};\n//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsic3RhY2svbGliL2FwaS1zdGFjay9ncmFwaHFsL3Jlc29sdmVycy9yZXF1ZXN0LWFjY291bnQudHMiXSwKICAibWFwcGluZ3MiOiAiO0FBQUEsU0FBMEMsWUFBWTtBQUUvQyxJQUFNLFVBQVUsQ0FBQyxRQUFpQjtBQUN2QyxRQUFNLFNBQVMsS0FBSyxPQUFPO0FBQzNCLE1BQUksTUFBTSxTQUFTO0FBRW5CLFFBQU0sRUFBRSxNQUFNLFdBQVcsSUFBSSxJQUFJLEtBQUs7QUFFdEMsTUFBSSxhQUFhLEtBQUssYUFBYSxJQUFJO0FBQ3JDLFNBQUssTUFBTSw0Q0FBNEMsaUJBQWlCO0FBQUEsRUFDMUU7QUFFQSxRQUFNLFdBQVksSUFBSSxTQUFvQztBQUUxRCxTQUFPO0FBQUEsSUFDTCxRQUFRO0FBQUEsSUFDUixjQUFjO0FBQUEsSUFDZCxRQUFRO0FBQUEsTUFDTixTQUFTO0FBQUEsUUFDUCxnQkFBZ0I7QUFBQSxRQUNoQixnQkFBZ0I7QUFBQSxNQUNsQjtBQUFBLE1BQ0EsTUFBTSxLQUFLLFVBQVU7QUFBQSxRQUNuQixNQUFNO0FBQUEsUUFDTixpQkFBaUIsSUFBSSxJQUFJO0FBQUEsUUFDekIsT0FBTyxLQUFLLFVBQVU7QUFBQSxVQUNwQjtBQUFBLFVBQ0E7QUFBQSxVQUNBO0FBQUEsVUFDQSxVQUFVO0FBQUEsWUFDUixRQUFRLFNBQVMsZUFBZTtBQUFBLFlBQ2hDLFVBQVUsU0FBUyxpQkFBaUI7QUFBQSxZQUNwQyxPQUFPLFNBQVM7QUFBQSxVQUNsQjtBQUFBLFFBQ0YsQ0FBQztBQUFBLE1BQ0gsQ0FBQztBQUFBLElBQ0g7QUFBQSxFQUNGO0FBQ0Y7QUFFTyxJQUFNLFdBQVcsQ0FBQyxRQUFpQjtBQUN4QyxTQUFPO0FBQUEsSUFDTCxRQUFRLElBQUksTUFBTTtBQUFBLEVBQ3BCO0FBQ0Y7IiwKICAibmFtZXMiOiBbXQp9Cg==\n",
+    "DataSourceName": "StepFunctionsDataSource",
+    "FunctionVersion": "2018-05-29",
+    "Name": "RequestAccount",
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    }
+   },
+   "DependsOn": [
+    "AppSyncSchemaA5DAC9A5",
+    "StepFunctionsDataSource318E9DB9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/RequestAccount/Resource"
+   }
+  },
+  "RequestAccountPipeline9A28368A": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Code": "\n        export const request = () => {\n          return {};\n        }\n\n        export const response = (ctx) => {\n          return ctx.prev.result;\n        }\n      ",
+    "FieldName": "requestAccount",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "RequestAccount6B016031",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    },
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "AppSyncSchemaA5DAC9A5"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/RequestAccountPipeline/Resource"
+   }
+  },
+  "DestroyAccount4CA80B96": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Code": "// stack/lib/api-stack/graphql/resolvers/destroy-account.ts\nimport { util } from \"@aws-appsync/utils\";\nvar request = (ctx) => {\n  const identity = ctx.identity.claims;\n  return {\n    method: \"POST\",\n    resourcePath: \"/\",\n    params: {\n      headers: {\n        \"x-amz-target\": \"AWSStepFunctions.StartExecution\",\n        \"content-type\": \"application/x-amz-json-1.0\"\n      },\n      body: JSON.stringify({\n        name: util.autoId(),\n        stateMachineArn: ctx.env.RELEASE_ACCOUNT_STATE_MACHINE_ARN,\n        input: JSON.stringify({\n          init: \"user\",\n          identity: {\n            userId: identity[\"custom:userId\"],\n            username: identity[\"custom:username\"],\n            email: identity.email\n          },\n          account: {\n            accountId: ctx.args.input.accountId\n          }\n        })\n      })\n    }\n  };\n};\nvar response = (ctx) => {\n  return true;\n};\nexport {\n  request,\n  response\n};\n//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsic3RhY2svbGliL2FwaS1zdGFjay9ncmFwaHFsL3Jlc29sdmVycy9kZXN0cm95LWFjY291bnQudHMiXSwKICAibWFwcGluZ3MiOiAiO0FBQUEsU0FBa0IsWUFBWTtBQUV2QixJQUFNLFVBQVUsQ0FBQyxRQUFpQjtBQUN2QyxRQUFNLFdBQVksSUFBSSxTQUFvQztBQUUxRCxTQUFPO0FBQUEsSUFDTCxRQUFRO0FBQUEsSUFDUixjQUFjO0FBQUEsSUFDZCxRQUFRO0FBQUEsTUFDTixTQUFTO0FBQUEsUUFDUCxnQkFBZ0I7QUFBQSxRQUNoQixnQkFBZ0I7QUFBQSxNQUNsQjtBQUFBLE1BQ0EsTUFBTSxLQUFLLFVBQVU7QUFBQSxRQUNuQixNQUFNLEtBQUssT0FBTztBQUFBLFFBQ2xCLGlCQUFpQixJQUFJLElBQUk7QUFBQSxRQUN6QixPQUFPLEtBQUssVUFBVTtBQUFBLFVBQ3BCLE1BQU07QUFBQSxVQUNOLFVBQVU7QUFBQSxZQUNSLFFBQVEsU0FBUyxlQUFlO0FBQUEsWUFDaEMsVUFBVSxTQUFTLGlCQUFpQjtBQUFBLFlBQ3BDLE9BQU8sU0FBUztBQUFBLFVBQ2xCO0FBQUEsVUFDQSxTQUFTO0FBQUEsWUFDUCxXQUFXLElBQUksS0FBSyxNQUFNO0FBQUEsVUFDNUI7QUFBQSxRQUNGLENBQUM7QUFBQSxNQUNILENBQUM7QUFBQSxJQUNIO0FBQUEsRUFDRjtBQUNGO0FBRU8sSUFBTSxXQUFXLENBQUMsUUFBaUI7QUFDeEMsU0FBTztBQUNUOyIsCiAgIm5hbWVzIjogW10KfQo=\n",
+    "DataSourceName": "StepFunctionsDataSource",
+    "FunctionVersion": "2018-05-29",
+    "Name": "DestroyAccount",
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    }
+   },
+   "DependsOn": [
+    "AppSyncSchemaA5DAC9A5",
+    "StepFunctionsDataSource318E9DB9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/DestroyAccount/Resource"
+   }
+  },
+  "DestroyAccountPipeline5CF4FD6D": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Code": "\n        export const request = () => {\n          return {};\n        }\n\n        export const response = (ctx) => {\n          return ctx.prev.result;\n        }\n      ",
+    "FieldName": "destroyAccount",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "DestroyAccount4CA80B96",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    },
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "AppSyncSchemaA5DAC9A5"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/DestroyAccountPipeline/Resource"
+   }
+  },
+  "NotifyAccountAssigned65245077": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Code": "\n          export const request = () => {\n            return {};\n          }\n  \n          export const response = (ctx) => {\n            return ctx.args.input;\n          }\n        ",
+    "DataSourceName": "NoneDataSource",
+    "FieldName": "notifyAccountAssigned",
+    "Kind": "UNIT",
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    },
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "AppSyncSchemaA5DAC9A5",
+    "NoneDataSourceE15C2AD2"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/NotifyAccountAssigned/Resource"
+   }
+  },
+  "ListAccountsEAECB93D": {
+   "Type": "AWS::AppSync::FunctionConfiguration",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Code": "// stack/lib/api-stack/graphql/resolvers/list-my-accounts.ts\nimport { query } from \"@aws-appsync/utils/dynamodb\";\nvar request = (ctx) => {\n  const taskId = util.autoId();\n  ctx.stash.taskId = taskId;\n  const identity = ctx.identity.claims;\n  return query({\n    index: \"userIndex\",\n    query: {\n      assignedTo: { eq: identity[\"custom:userId\"] }\n    }\n  });\n};\nvar response = (ctx) => {\n  return ctx.result;\n};\nexport {\n  request,\n  response\n};\n//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsic3RhY2svbGliL2FwaS1zdGFjay9ncmFwaHFsL3Jlc29sdmVycy9saXN0LW15LWFjY291bnRzLnRzIl0sCiAgIm1hcHBpbmdzIjogIjtBQUtBLFNBQVMsYUFBYTtBQUVmLElBQU0sVUFBVSxDQUFDLFFBQXVDO0FBQzdELFFBQU0sU0FBUyxLQUFLLE9BQU87QUFDM0IsTUFBSSxNQUFNLFNBQVM7QUFFbkIsUUFBTSxXQUFZLElBQUksU0FBb0M7QUFFMUQsU0FBTyxNQUE4QjtBQUFBLElBQ25DLE9BQU87QUFBQSxJQUNQLE9BQU87QUFBQSxNQUNMLFlBQVksRUFBRSxJQUFJLFNBQVMsZUFBZSxFQUFFO0FBQUEsSUFDOUM7QUFBQSxFQUNGLENBQUM7QUFDSDtBQUVPLElBQU0sV0FBVyxDQUFDLFFBQWlCO0FBQ3hDLFNBQU8sSUFBSTtBQUNiOyIsCiAgIm5hbWVzIjogW10KfQo=\n",
+    "DataSourceName": "AccountsDataSource",
+    "FunctionVersion": "2018-05-29",
+    "Name": "ListAccounts",
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    }
+   },
+   "DependsOn": [
+    "AccountsDataSourceCECCB5D4",
+    "AppSyncSchemaA5DAC9A5"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/ListAccounts/Resource"
+   }
+  },
+  "ListMyAccountsPipelineB0E8B36D": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSync2828A3DF",
+      "ApiId"
+     ]
+    },
+    "Code": "\n        export const request = () => {\n          return {};\n        }\n\n        export const response = (ctx) => {\n          return ctx.prev.result;\n        }\n      ",
+    "FieldName": "listMyAccounts",
+    "Kind": "PIPELINE",
+    "PipelineConfig": {
+     "Functions": [
+      {
+       "Fn::GetAtt": [
+        "ListAccountsEAECB93D",
+        "FunctionId"
+       ]
+      }
+     ]
+    },
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    },
+    "TypeName": "Query"
+   },
+   "DependsOn": [
+    "AppSyncSchemaA5DAC9A5"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "Api/ListMyAccountsPipeline/Resource"
+   }
+  },
+  "RequestAccountRule857BD4B4": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "EventBusName": {
+     "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+    },
+    "EventPattern": {
+     "source": [
+      "VendingMachine"
+     ],
+     "detail-type": [
+      "accountAssigned"
+     ]
+    },
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "AppSyncParameters": {
+       "GraphQLOperation": "mutation Notify($input: NotifyAccountAssignedInput!){ notifyAccountAssigned(input: $input) { taskId, status, details { accountId, name, expiresAt } } }"
+      },
+      "Arn": {
+       "Fn::GetAtt": [
+        "AppSync2828A3DF",
+        "GraphQLEndpointArn"
+       ]
+      },
+      "Id": "Target0",
+      "InputTransformer": {
+       "InputPathsMap": {
+        "detail-taskId": "$.detail.taskId",
+        "detail-status": "$.detail.status",
+        "detail-account-accountId": "$.detail.account.accountId",
+        "detail-account-name": "$.detail.account.name",
+        "detail-account-expiresAt": "$.detail.account.expiresAt"
+       },
+       "InputTemplate": "{\"input\":{\"taskId\":<detail-taskId>,\"status\":<detail-status>,\"details\":{\"accountId\":<detail-account-accountId>,\"name\":<detail-account-name>,\"expiresAt\":<detail-account-expiresAt>}}}"
+      },
+      "RoleArn": {
+       "Fn::GetAtt": [
+        "AppSyncEventsRole15150078",
+        "Arn"
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/RequestAccountRule/Resource"
+   }
+  },
+  "AssignationFailedRule78802053": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "EventBusName": {
+     "Fn::ImportValue": "EventBus:ExportsOutputRefVendingMachine168CF2DD31F5221B"
+    },
+    "EventPattern": {
+     "source": [
+      "VendingMachine"
+     ],
+     "detail-type": [
+      "accountAssignationFailed"
+     ]
+    },
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "AppSyncParameters": {
+       "GraphQLOperation": "mutation Notify($input: NotifyAccountAssignedInput!){ notifyAccountAssigned(input: $input) { taskId, status, message } }"
+      },
+      "Arn": {
+       "Fn::GetAtt": [
+        "AppSync2828A3DF",
+        "GraphQLEndpointArn"
+       ]
+      },
+      "Id": "Target0",
+      "InputTransformer": {
+       "InputPathsMap": {
+        "detail-taskId": "$.detail.taskId",
+        "detail-status": "$.detail.status",
+        "detail-message": "$.detail.message"
+       },
+       "InputTemplate": "{\"input\":{\"taskId\":<detail-taskId>,\"status\":<detail-status>,\"message\":<detail-message>}}"
+      },
+      "RoleArn": {
+       "Fn::GetAtt": [
+        "AppSyncEventsRole15150078",
+        "Arn"
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/AssignationFailedRule/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WPTW6DMBCFz5K9mTawqLokQWkXUdXCAaKJMyEOxqaMTYQQd68wpaKr9775nxi2L6/wvMEHR/JSRVqdYSgcykrgg08DNg33RsLw1mJz+9Zpo8T+agJ9Hf9TIW9Uo/iwhjJ0WFjfSpryK3p3rllh1husbXZehdJ548Eb6ZQ1U//i99ZcVelbDImc2OqO2qli8aNQWMOQWx0WB/20Wsl+wtmNQtuS4WjLnByZMIuTEzKTY0gnEZzAzsuK3A6ZBHVkHMOQ+9+xXtM4hgOWF/986C8clsqUozD2QnDnpy6OYZvAdnNnpaLWG6dqgnzWH/9JrpmEAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "Api/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputFnGetAttAppSync2828A3DFGraphQLUrl888A858F": {
+   "Value": {
+    "Fn::GetAtt": [
+     "AppSync2828A3DF",
+     "GraphQLUrl"
+    ]
+   },
+   "Export": {
+    "Name": "Api:ExportsOutputFnGetAttAppSync2828A3DFGraphQLUrl888A858F"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

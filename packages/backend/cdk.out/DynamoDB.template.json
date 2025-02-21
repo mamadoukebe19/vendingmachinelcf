@@ -1,0 +1,133 @@
+{
+ "Resources": {
+  "AccountsBE8A900E": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "accountId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "status",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "assignedTo",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "assignedAt",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "statusIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "status",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "userIndex",
+      "KeySchema": [
+       {
+        "AttributeName": "assignedTo",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "assignedAt",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "KeySchema": [
+     {
+      "AttributeName": "accountId",
+      "KeyType": "HASH"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "DynamoDB/Accounts/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/yXGSw5AMBAA0LPYt0NrIdZugL1M25HUp02MEhF3l7B6T4OqaigyPFlaN8vFG7i7He0s8OTBXQHX6AzcPZqFRDOGL49oiWPaLD0iREcwcX5oDaoElU3svdxS2P1K0P6+CdruoGgAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "DynamoDB/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ExportsOutputRefAccountsBE8A900E49F49769": {
+   "Value": {
+    "Ref": "AccountsBE8A900E"
+   },
+   "Export": {
+    "Name": "DynamoDB:ExportsOutputRefAccountsBE8A900E49F49769"
+   }
+  },
+  "ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21": {
+   "Value": {
+    "Fn::GetAtt": [
+     "AccountsBE8A900E",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "DynamoDB:ExportsOutputFnGetAttAccountsBE8A900EArn3C4EFE21"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

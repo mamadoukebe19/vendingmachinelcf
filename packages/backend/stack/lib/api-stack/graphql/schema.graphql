@@ -1,0 +1,89 @@
+type Query {
+  listMyAccounts: ListMyAccountsResult!
+}
+
+type Mutation {
+  requestAccount(input: RequestAccountInput!): AccountRequestResult!
+  destroyAccount(input: DestroyAccountInput!): Boolean!
+  notifyAccountAssigned(
+    input: NotifyAccountAssignedInput!
+  ): AccountAssignedResult! @aws_iam
+}
+
+type Subscription {
+  onAccountAssigned(taskId: String!): AccountAssignedResult
+    @aws_subscribe(mutations: ["notifyAccountAssigned"])
+}
+
+type CredentialsResult {
+  credentials: Credential!
+  signInUrl: String!
+}
+
+type Credential {
+  accessKeyId: String!
+  secretAccessKey: String!
+  sessionToken: String!
+  expiration: AWSDateTime!
+}
+
+input RequestAccountInput {
+  name: String!
+  expiration: Int!
+}
+
+type AccountRequestResult {
+  taskId: String!
+}
+
+input NotifyAccountAssignedInput @aws_iam {
+  taskId: String!
+  status: AccountAssignedStatus!
+  message: String
+  details: AccountAssignedDetailsInput
+}
+
+input AccountAssignedDetailsInput @aws_iam {
+  accountId: String!
+  name: String!
+  expiresAt: AWSDateTime!
+}
+
+enum AccountAssignedStatus {
+  SUCCESS
+  FAILED
+}
+
+type AccountAssignedResult @aws_iam @aws_cognito_user_pools {
+  taskId: String!
+  status: AccountAssignedStatus!
+  message: String
+  details: AccountAssignedDetails
+}
+
+type AccountAssignedDetails @aws_iam @aws_cognito_user_pools {
+  accountId: String!
+  name: String!
+  expiresAt: AWSDateTime!
+}
+
+type ListMyAccountsResult {
+  items: [Account!]!
+}
+
+enum AccountStatus {
+  FREE
+  USED
+}
+
+type Account {
+  accountId: String!
+  name: String!
+  status: AccountStatus!
+  assignedAt: AWSDateTime!
+  expiresAt: AWSDateTime!
+}
+
+input DestroyAccountInput {
+  accountId: String!
+}

@@ -1,0 +1,58 @@
+regions:
+  - all
+
+accounts:
+  '${AWS_NUKE_ACCOUNT_ID}':
+    presets:
+      - organization
+      - vendingMachine
+
+presets:
+  organization:
+    filters:
+      IAMSAMLProvider:
+        - property: ARN
+          type: contains
+          value: 'AWSSSO'
+      IAMRole:
+        - property: Name
+          type: contains
+          value: OrganizationAccountAccessRole
+      IAMRolePolicyAttachment:
+        - property: RoleName
+          value: OrganizationAccountAccessRole
+  vendingMachine:
+    filters:
+      IAMRole:
+        - property: Name
+          type: contains
+          value: AWSNukeRole
+      IAMRolePolicyAttachment:
+        - property: RoleName
+          value: AWSNukeRole
+
+# ignore deprecated services
+resource-types:
+  excludes:
+    - MachineLearningEvaluation
+    - MachineLearningDataSource
+    - MachineLearningBranchPrediction
+    - RoboMakerRobotApplication
+    - OpsWorksCMServerState
+    - OpsWorksCMBackup
+    - OpsWorksLayer
+    - OpsWorksUserProfile
+    - OpsWorksCMServer
+    - OpsWorksInstance
+    - OpsWorksApp
+    - RoboMakerSimulationApplication
+    - MachineLearningMLModel
+    - RoboMakerSimulationJob
+    - ElasticTranscoderPipeline
+    - FMSPolicy
+    - CloudSearchDomain
+    - ElasticTranscoderPreset
+    - Cloud9Environment
+    - CodeStarProject
+    # only available in management accounts
+    - FMSNotificationChannel

@@ -1,0 +1,20 @@
+{
+  "version": "39.0.0",
+  "files": {
+    "c54116657ce15642f2231a506b051982e8dc807992373c1736c6ac596e52a482": {
+      "source": {
+        "path": "DynamoDB.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "481665124648-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-481665124648-us-east-1",
+          "objectKey": "c54116657ce15642f2231a506b051982e8dc807992373c1736c6ac596e52a482.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::481665124648:role/cdk-hnb659fds-file-publishing-role-481665124648-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
